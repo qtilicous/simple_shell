@@ -92,61 +92,61 @@ ssize_t custom_getline(char **output_buffer, size_t *output_size, FILE *input_st
 void custom_getline2(char **output_buffer, size_t *output_size, char *temp_buffer, size_t input_size) /*helper function for custom_getline(), that compares and assign the result to it.*/
 
 /* strings1.c */
-char *custom_copy_string(char *dest, char *src);	Copy the source string to the destination.				
-char *custom_concatenate_strings(char *dest, const char *src);	Concatenate two strings.																								
-char *custom_duplicate_string(const char *str);	Duplicate a string in memory.																								
-int custom_compare_strings(char *s1, char *s2);	Compare two strings.																								
-char *custom_tokenize_string(char string[], const char *delimiter);	Tokenize a string using a delimiter.																								
-																									
-/* strings2.c */																									
-int custom_count_digits(const char *str);																									
-int custom_string_length(const char *str);																									
-char *custom_integer_to_string(int num);																									
-int custom_string_to_integer(char *str);																									
-int custom_is_digit(const char *character);																									
-																									
-/* memory.c */																									
-void custom_copy_memory(void *destination_ptr, const void *source_ptr, unsigned int size);																									
-void *custom_reallocate_memory(void *old_ptr, unsigned int old_size, unsigned int new_size);																									
-char **custom_reallocate_string_array(char **old_array, unsigned int old_size, unsigned int new_size);																									
-void free_separator_list(Separator **head);																									
-void free_command_line_list(CommandLine **head);																									
-																									
-/* commands.c */																									
-int find_executable_command(Shell *shell);																									
-int execute_command(Shell *shell);																									
-int is_command_executable(Shell *shell);																									
-char *find_command_location(char *command, char **environment);																									
-int is_directory_path(char *path, int *index);																									
-																									
-/* environment.c */																									
-char *get_environment_variable(const char *variable_name, char **environment);																									
-int print_environment_variables(Shell *shell);																									
-int set_environment_variable(Shell *shell);																									
-int unset_environment_variable(Shell *shell);																									
-char *create_environment_variable(char *variable_name, char *variable_value);																									
-																									
-/* environment2.c */																									
-void change_directory(Shell *shell);																									
-int compare_environment_variable(const char *variable_name, const char *partial_name);																									
-char *get_cd_environment_variable(const char *variable_name, char **environment);																									
-void set_cd_environment_variable(char *variable_name, char *variable_value, Shell *shell);																									
-																									
-/* command_parser.c */																									
-int parse_command(Shell *shell, char *user_input);																									
-char **parse_command_line(char *user_input);																									
-void create_command_line_node(Separator **separator_head, CommandLine **command_line_head, char *user_input);																									
-void next_command_line(Separator **separator_list, CommandLine **command_line_list, Shell *shell);																									
-																									
-/* bonus.c */																									
-char *strip_non_printable_characters(char *user_input);																									
-char *strip_non_printable_characters2(char *user_input);																									
-Separator *append_separator_node(Separator **head, char separator);																									
-CommandLine *append_command_line_node(CommandLine **head, char *command_line);																									
-int custom_compare_string(char string[], const char *delimiter);																									
-																									
-/* errors1.c */																									
-int check_command_error(char *directory, Shell *shell);																									
+char *custom_copy_string(char *dest, char *src);	/*Copy the source string to the destination.*/
+char *custom_concatenate_strings(char *dest, const char *src);	/*Concatenate two strings.*/
+char *custom_duplicate_string(const char *str);	Duplicate a string in memory.
+int custom_compare_strings(char *s1, char *s2);	Compare two strings.
+char *custom_tokenize_string(char string[], const char *delimiter);	/*Tokenize a string using a delimiter.*/
+
+/* strings2.c */
+int custom_count_digits(const char *str);
+int custom_string_length(const char *str);
+char *custom_integer_to_string(int num);
+int custom_string_to_integer(char *str);
+int custom_is_digit(const char *character);
+
+/* memory.c */
+void custom_copy_memory(void *destination_ptr, const void *source_ptr, unsigned int size);
+void *custom_reallocate_memory(void *old_ptr, unsigned int old_size, unsigned int new_size);
+char **custom_reallocate_string_array(char **old_array, unsigned int old_size, unsigned int new_size);
+void free_separator_list(Separator **head);
+void free_command_line_list(CommandLine **head);
+
+/* commands.c */
+int find_executable_command(Shell *shell;
+int execute_command(Shell *shell);
+int is_command_executable(Shell *shell);
+char *find_command_location(char *command, char **environment);
+int is_directory_path(char *path, int *index);
+
+/* environment.c */
+char *get_environment_variable(const char *variable_name, char **environment);
+int print_environment_variables(Shell *shell);
+int set_environment_variable(Shell *shell);
+int unset_environment_variable(Shell *shell);
+char *create_environment_variable(char *variable_name, char *variable_value);
+
+/* environment2.c */
+void change_directory(Shell *shell);
+int compare_environment_variable(const char *variable_name, const char *partial_name);
+char *get_cd_environment_variable(const char *variable_name, char **environment);
+void set_cd_environment_variable(char *variable_name, char *variable_value, Shell *shell);
+
+/* command_parser.c */
+int parse_command(Shell *shell, char *user_input);
+char **parse_command_line(char *user_input);
+void create_command_line_node(Separator **separator_head, CommandLine **command_line_head, char *user_input);
+void next_command_line(Separator **separator_list, CommandLine **command_line_list, Shell *shell);
+
+/* bonus.c */
+char *strip_non_printable_characters(char *user_input);
+char *strip_non_printable_characters2(char *user_input);
+Separator *append_separator_node(Separator **head, char separator);
+CommandLine *append_command_line_node(CommandLine **head, char *command_line);
+int custom_compare_string(char string[], const char *delimiter);
+
+/* errors1.c */
+int check_command_error(char *directory, Shell *shell);
 int handle_errors(Shell *shell, int error);																									
 char *command_not_found_error(Shell *shell);																									
 char *environment_error(Shell *shell);																									
