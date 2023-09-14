@@ -88,8 +88,8 @@ struct Separator *next;
 
 /* scan.c */
 char *read_user_input(int *eof);	/*function that reads the user input string*/
-ssize_t custom_getline(char **output_buffer, size_t *output_size, FILE *input_stream)	/*function that reads user input from stream.*/
-void custom_getline2(char **output_buffer, size_t *output_size, char *temp_buffer, size_t input_size) /*helper function for custom_getline(), that compares and assign the result to it.*/
+ssize_t custom_getline(char **outp_buffer, size_t *outp_size, FILE *inp_stream)	/*function that reads user input from stream.*/
+void custom_getline2(char **buffer, size_t *s, char *s_buffer, size_t inpsize) /*helper function for custom_getline(), that compares and assign the result to it.*/
 
 /* strings1.c */
 char *custom_copy_string(char *dest, char *src);	/*Copy the source string to the destination.*/
