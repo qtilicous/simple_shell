@@ -87,16 +87,21 @@ struct Separator *next;
 };
 
 /* scan.c */
-char *read_user_input(int *eof);	/*function that reads the user input string*/
-ssize_t custom_getline(char **outp_buffer, size_t *outp_size, FILE *inp_stream)	/*function that reads user input from stream.*/
-void custom_getline2(char **buffer, size_t *s, char *s_buffer, size_t inpsize) /*helper function for custom_getline(), that compares and assign the result to it.*/
+/**
+ * read_user_input - reads the user input string
+ * @eof: a pointer to an interger
+ * Return: allocated string containing the user's input.
+ */
+char *read_user_input(int *eof);
+ssize_t custom_getline(char **outp_buffer, size_t *outp_size, FILE *inp_stream);
+void custom_getline2(char **buffer, size_t *s, char *s_buffer, size_t inpsize);
 
 /* strings1.c */
-char *custom_copy_string(char *dest, char *src);	/*Copy the source string to the destination.*/
-char *custom_concatenate_strings(char *dest, const char *src);	/*Concatenate two strings.*/
-char *custom_duplicate_string(const char *str);	Duplicate a string in memory.
-int custom_compare_strings(char *s1, char *s2);	Compare two strings.
-char *custom_tokenize_string(char string[], const char *delimiter);	/*Tokenize a string using a delimiter.*/
+char *custom_copy_string(char *dest, char *src);
+char *custom_concatenate_strings(char *dest, const char *src);
+char *custom_duplicate_string(const char *str);
+int custom_compare_strings(char *s1, char *s2);
+char *custom_tokenize_string(char string[], const char *delimiter);
 
 /* strings2.c */
 int custom_count_digits(const char *str);
@@ -147,21 +152,22 @@ int custom_compare_string(char string[], const char *delimiter);
 
 /* errors1.c */
 int check_command_error(char *directory, Shell *shell);
-int handle_errors(Shell *shell, int error);																									
-char *command_not_found_error(Shell *shell);																									
-char *environment_error(Shell *shell);																									
-char *change_directory_error(Shell *shell);																									
-																									
-/* errors2.c */																									
-char *change_directory_error2(Shell *shell, char *message, char *error, char *path);																									
-char *path_error(Shell *shell);																									
-char *exit_error(Shell *shell);																									
-																									
-/* builtins.c */																									
-int (*find_builtin_command(char *command))(Shell *shell);																									
-int exit_shell(Shell *shell);																									
-int change_current_directory(Shell *shell);																									
-void go_to_home_directory(Shell *shell);																									
-void go_to_previous_directory(Shell *shell);																									
-																									
-#endif																									
+int handle_errors(Shell *shell, int error);
+char *command_not_found_error(Shell *shell);
+char *environment_error(Shell *shell);
+char *change_directory_error(Shell *shell);
+
+/* errors2.c */
+char *change_directory_error2(Shell *shell, char *message, char *error, char *path);
+char *path_error(Shell *shell);
+char *exit_error(Shell *shell);
+
+/* builtins.c */
+int (*find_builtin_command(char *command))(Shell *shell);
+int exit_shell(Shell *shell);
+int change_current_directory(Shell *shell);
+void go_to_home_directory(Shell *shell);
+void go_to_previous_directory(Shell *shell);
+
+#endif
+
