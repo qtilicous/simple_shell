@@ -111,11 +111,10 @@ int custom_string_to_integer(char *str);
 int custom_is_digit(const char *character);
 
 /* memory.c */
-void custom_copy_memory(void *destination_ptr, const void *source_ptr, unsigned int size);
-void *custom_reallocate_memory(void *old_ptr, unsigned int old_size, unsigned int new_size);
-char **custom_reallocate_string_array(char **old_array, unsigned int old_size, unsigned int new_size);
-void free_separator_list(Separator **head);
-void free_command_line_list(CommandLine **head);
+void custom_copy_memory(void *dest_ptr, const void *src_ptr, unsigned int size);
+void *custom_reallocate_memory(void *ptr, unsigned int old, unsigned int new);
+void custom_free_separator_list(separator_t **head);
+void custom_free_command_line_list(cmdline_t **head);
 
 /* commands.c */
 int find_executable_command(Shell *shell;
