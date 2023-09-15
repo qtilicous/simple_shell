@@ -121,10 +121,10 @@ int unset_environment_variable(Shell *shell);
 char *create_environment_variable(char *variable_name, char *variable_value);
 
 /* environment2.c */
-void change_directory(Shell *shell);
-int compare_environment_variable(const char *variable_name, const char *partial_name);
-char *get_cd_environment_variable(const char *variable_name, char **environment);
-void set_cd_environment_variable(char *variable_name, char *variable_value, Shell *shell);
+void set_cd_env_var(char *var_name, char *var_value, Shell *shell);
+void change_current_directory(Shell *shell);
+int compare_env_varname(const char *variable_name, const char *partial_name);
+char *get_cd_env_variable(const char *variable_name, char **environment);
 
 /* command_parser.c */
 int parse_command(Shell *shell, char *user_input);
