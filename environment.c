@@ -162,26 +162,26 @@ int unset_environment_var(Shell *shell)
 
 /**
  * create_environment - Create a new environment variable.
- * @env_name: Name of the environment variable.
- * @env_value: Value of the environment variable.
+ * @name: Name of the environment variable.
+ * @value: Value of the environment variable.
  *
  * Return: New environment variable.
  */
-char *create_environment(char *env_name, char *env_value)
+char *create_environment(char *name, char *value)
 {
 	char *create;
-	int env_len = custom_string_length(env_name), val_len = custom_string_length(env_value);
+	int env = custom_string_length(name), val = custom_string_length(value);
 
-	create = malloc((env_len + val_len + 2) * sizeof(char));
+	create = malloc((env + val + 2) * sizeof(char));
 	if (create == NULL)
 	{
 		free(create);
 		return (NULL);
 	}
 
-	custom_copy_string(create, env_name);
+	custom_copy_string(create, name);
 	custom_concatenate_strings(create, "=");
-	custom_concatenate_strings(create, env_value);
+	custom_concatenate_strings(create, value);
 
 	return (create);
 }
