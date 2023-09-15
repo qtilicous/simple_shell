@@ -110,7 +110,7 @@ char *custom_integer_to_string(int num);
 int custom_string_to_integer(char *str);
 int custom_is_digit(const char *character);
 
-/* memory.c */
+/* memory.c e */
 void custom_copy_memory(void *dest_ptr, const void *src_ptr, unsigned int size);
 void *custom_reallocate_memory(void *ptr, unsigned int old, unsigned int new);
 void custom_free_separator_list(separator_t **head);
