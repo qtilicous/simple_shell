@@ -29,13 +29,13 @@ void set_cd_env_var(char *var_name, char *var_value, Shell *shell)
 		free(env_var);
 		i++;
 	}
-	shell->_environ = custom_reallocate_memory(shell->_environ, i, (i + 2) * sizeof(char *));
+	shell->_environ = reallocate_dp(shell->_environ, i, (i + 2) * sizeof(char *));
 	shell->_environ[i] = create_environment(var_name, var_value);
 	shell->_environ[i + 1] = NULL;
 }
 
 /**
- * change_current_directory - Change the current directory to a user-specified directory.
+ * change_current_directory - Change the current directory
  * @shell: Shell structure.
  *
  * Return: nothing.
