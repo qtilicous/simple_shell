@@ -127,10 +127,10 @@ int compare_env_varname(const char *variable_name, const char *partial_name);
 char *get_cd_env_variable(const char *variable_name, char **environment);
 
 /* command_parser.c */
-int parse_command(Shell *shell, char *user_input);
+int parse_command_lines(Shell *shell, char *user_input);
 char **parse_command_line(char *user_input);
-void create_node(Separator **separator_head, CommandLine **command_line_head, char *user_input);
-void next_command_line(Separator **separator_list, CommandLine **command_line_list, Shell *shell);
+void create_nodes(Separator **s_head, CommandLine **c_head, char *user_input);
+void get_next_command_line(Separator **set, CommandLine **com, Shell *shell);
 
 /* bonus.c */
 char *remove_non_printable(char *user_input);
