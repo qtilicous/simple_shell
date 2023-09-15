@@ -25,26 +25,26 @@ void custom_copy_memory(void *dest_ptr, const void *src_ptr, unsigned int size)
  * custom_reallocate_memory - Reallocate memory.
  * @ptr: Pointer to the previously allocated memory.
  * @old: Size, in bytes, of the old memory block.
- * @new: New size, in bytes, of the memory block.
+ * @nw: New size, in bytes, of the memory block.
  *
- * Return: If new == old, returns ptr.
+ * Return: If nw == old, returns ptr.
  * If reallocation fails, returns NULL.
  */
-void *custom_reallocate_memory(void *ptr, unsigned int old, unsigned int new)
+void *custom_reallocate_memory(void *ptr, unsigned int old, unsigned int nw)
 {
 	unsigned int i;
 	char **new_double_ptr;
 
 	if (old_double_ptr == NULL)
 	{
-		return (malloc(new * sizeof(char *)));
+		return (malloc(nw * sizeof(char *)));
 	}
-	if (new == old)
+	if (nw == old)
 	{
 		return (old_double_ptr);
 	}
 
-	new_double_ptr = malloc(new * sizeof(char *));
+	new_double_ptr = malloc(nw * sizeof(char *));
 	if (new_double_ptr == NULL)
 	{
 		return (NULL);
@@ -108,5 +108,47 @@ void custom_free_command_line_list(cmdline_t **head)
 
 		*head = NULL;
 	}
+}
+
+/**
+ * reallocate_dp - Reallocate memory for a double pointer.
+ * @old_double_ptr: Double pointer to the previously allocated memory.
+ * @old: Size, in bytes, of the old memory block.
+ * @nw: New size, in bytes, of the memory block.
+ *
+ * Return: If nw == old, returns old_double_ptr without changes.
+ * If reallocation fails, returns NULL.
+ */
+char **reallocate_dp(char **old_double_ptr, unsigned int old, unsigned int nw)
+{
+	unsigned int i;
+	char **new_double_ptr;
+
+	if (old_double_ptr == NULL)
+	{
+		return (malloc(nw * sizeof(char *)));
+	}
+
+	if (nw == old)
+	{
+		return (old_double_ptr);
+	}
+
+	new_double_ptr = malloc(nw * sizeof(char *));
+	if (new_double_ptr == NULL)
+	{
+		return (NULL);
+	}
+
+	i = 0;
+	while (i < old)
+	{
+		new_double_ptr[i] = old_double_ptr[i];
+		i++;
+	}
+
+	free(old_double_ptr);
+
+	return (new_double_ptr);
 }
 
