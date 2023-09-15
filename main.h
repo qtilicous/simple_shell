@@ -2,19 +2,12 @@
 #define MAIN_H
 
 #include <limits.h>
-
 #include <unistd.h>
-
 #include <stdio.h>
-
 #include <fcntl.h>
-
 #include <stdlib.h>
-
 #include <sys/stat.h>
-
 #include <sys/wait.h>
-
 #include <string.h>
 
 #define UNUSED(x) (void)(x)
@@ -42,13 +35,13 @@ typedef struct CommandLine CommandLine;
 
 struct Shell
 {
-char **args;
-char *user_input;
-char **parsed_args;
-char *pid_str;
-char **environment;
-int status;
-int line_count;
+	char **args;
+	char *user_input;
+	char **parsed_args;
+	char *pid_str;
+	char **environment;
+	int status;
+	int line_count;
 };
 
 /**
@@ -59,8 +52,8 @@ int line_count;
 
 struct Builtins
 {
-char *name;
-int (*function)(Shell *shell);
+	char *name;
+	int (*function)(Shell *shell);
 };
 /**
 * struct CommandLine - Structure for a single linked list of command lines.
@@ -70,8 +63,8 @@ int (*function)(Shell *shell);
 */
 struct CommandLine
 {
-char *line;
-struct CommandLine *next;
+	char *line;
+	struct CommandLine *next;
 };
 
 /**
@@ -82,8 +75,8 @@ struct CommandLine *next;
 */
 struct Separator
 {
-char symbol;
-struct Separator *next;
+	char symbol;
+	struct Separator *next;
 };
 
 /* scan.c */
@@ -99,25 +92,25 @@ int custom_compare_strings(char *s1, char *s2);	Compare two strings.
 char *custom_tokenize_string(char string[], const char *delimiter);	/*Tokenize a string using a delimiter.*/
 
 /* strings2.c */
-int custom_count_digits(const char *str);
-int custom_string_length(const char *str);
-char *custom_integer_to_string(int num);
-int custom_string_to_integer(char *str);
-int custom_is_digit(const char *character);
+int custom_count_digits(const char *str); /*Count the number of digits in an integer.*/
+int custom_string_length(const char *str); /*Get the length of a string.*/
+char *custom_integer_to_string(int num); /*Convert an integer to a string.*/
+int custom_string_to_integer(char *str); /*Convert a string to an integer.*/
+int custom_is_digit(const char *character); /*Check if a string represents a digit (0 through 9).*/
 
 /* memory.c */
-void custom_copy_memory(void *destination_ptr, const void *source_ptr, unsigned int size);
-void *custom_reallocate_memory(void *old_ptr, unsigned int old_size, unsigned int new_size);
-char **custom_reallocate_string_array(char **old_array, unsigned int old_size, unsigned int new_size);
-void free_separator_list(Separator **head);
-void free_command_line_list(CommandLine **head);
+void copy_memory(void *dest_ptr, const void *src_ptr, unsigned int size) /*Copy memory from source to destination.*/
+void *reallocate_memory(void *old_ptr, unsigned int old_size, unsigned int new_size); /*Reallocate memory.*/
+char **reallocate_memory_double_pointer(char **old_double_ptr, unsigned int old_size, unsigned int new_size) /*Reallocate memory for a double pointer.*/
+void free_separator_list(Separator **head); /*Free a separator singly linked list.*/
+void free_command_line_list(CommandLine **head); /*Free a command line singly linked list.*/
 
 /* commands.c */
-int find_executable_command(Shell *shell;
-int execute_command(Shell *shell);
-int is_command_executable(Shell *shell);
-char *find_command_location(char *command, char **environment);
-int is_directory_path(char *path, int *index);
+int find_builtin_or_execute(Shell *shell) /*Find and execute a command.*/
+int execute_command(Shell *shell); /*Execute a command.*/
+int is_executable(Shell *shell) /*Check if a file is executable.*/
+char *find_command_location(char *command, char **environment); /*Find the location of a command.*/
+int is_directory_path(char *path, int *index); /*Check if a path is a directory in the current directory.*/
 
 /* environment.c */
 char *get_environment_variable(const char *variable_name, char **environment);
