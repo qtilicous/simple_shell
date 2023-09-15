@@ -129,15 +129,15 @@ char *get_cd_env_variable(const char *variable_name, char **environment);
 /* command_parser.c */
 int parse_command(Shell *shell, char *user_input);
 char **parse_command_line(char *user_input);
-void create_command_line_node(Separator **separator_head, CommandLine **command_line_head, char *user_input);
+void create_node(Separator **separator_head, CommandLine **command_line_head, char *user_input);
 void next_command_line(Separator **separator_list, CommandLine **command_line_list, Shell *shell);
 
 /* bonus.c */
-char *strip_non_printable_characters(char *user_input);
-char *strip_non_printable_characters2(char *user_input);
-Separator *append_separator_node(Separator **head, char separator);
-CommandLine *append_command_line_node(CommandLine **head, char *command_line);
-int custom_compare_string(char string[], const char *delimiter);
+char *remove_non_printable(char *user_input);
+char *restore_non_printable(char *user_input);
+separator_t *append_separator_to_list(separator_t **head, char separator);
+cmdline_t *append_command_line_to_list(cmdline_t **head, char *cmd);
+int custom_strcmp(char string[], const char *delim);
 
 /* errors1.c */
 int check_command_error(char *directory, Shell *shell);
