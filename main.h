@@ -80,42 +80,60 @@ struct Separator
 };
 
 /* scan.c */
-/**
- * read_user_input - reads the user input string
- * @eof: a pointer to an interger
- * Return: allocated string containing the user's input.
- */
 char *read_user_input(int *eof);
+/*function that reads the user input string*/
 ssize_t custom_getline(char **outp_buffer, size_t *outp_size, FILE *inp_stream);
+/*function that reads user input from stream.*/
 void custom_getline2(char **buffer, size_t *s, char *s_buffer, size_t inpsize);
+/*helper function for custom_getline(), that compares and assign the result to it.*/
 
 /* strings1.c */
 char *custom_copy_string(char *dest, char *src);
+/*Copy the source string to the destination.*/
 char *custom_concatenate_strings(char *dest, const char *src);
+/*Concatenate two strings.*/
 char *custom_duplicate_string(const char *str);
+/*Duplicate a string in memory.*/
 int custom_compare_strings(char *s1, char *s2);
+/*Compare two strings.*/
 char *custom_tokenize_string(char string[], const char *delimiter);
+/*Tokenize a string using a delimiter.*/
 
 /* strings2.c */
-int custom_count_digits(const char *str); /*Count the number of digits in an integer.*/
-int custom_string_length(const char *str); /*Get the length of a string.*/
-char *custom_integer_to_string(int num); /*Convert an integer to a string.*/
-int custom_string_to_integer(char *str); /*Convert a string to an integer.*/
-int custom_is_digit(const char *character); /*Check if a string represents a digit (0 through 9).*/
+int custom_count_digits(const char *str);
+/*Count the number of digits in an integer.*/
+int custom_string_length(const char *str);
+/*Get the length of a string.*/
+char *custom_integer_to_string(int num);
+/*Convert an integer to a string.*/
+int custom_string_to_integer(char *str);
+/*Convert a string to an integer.*/
+int custom_is_digit(const char *character);
+/*Check if a string represents a digit (0 through 9).*/
 
 /* memory.c */
-void copy_memory(void *dest_ptr, const void *src_ptr, unsigned int size) /*Copy memory from source to destination.*/
-void *reallocate_memory(void *old_ptr, unsigned int old_size, unsigned int new_size); /*Reallocate memory.*/
-char **reallocate_memory_double_pointer(char **old_double_ptr, unsigned int old_size, unsigned int new_size) /*Reallocate memory for a double pointer.*/
-void free_separator_list(Separator **head); /*Free a separator singly linked list.*/
-void free_command_line_list(CommandLine **head); /*Free a command line singly linked list.*/
+void copy_memory(void *dest_ptr, const void *src_ptr, unsigned int size);
+/*Copy memory from source to destination.*/
+void *reallocate_memory(void *old_ptr, unsigned int old_size, unsigned int new_size);
+/*Reallocate memory.*/
+char **reallocate_memory_double_pointer(char **old_double_ptr, unsigned int old_size, unsigned int new_size);
+/*Reallocate memory for a double pointer.*/
+void free_separator_list(Separator **head);
+/*Free a separator singly linked list.*/
+void free_command_line_list(CommandLine **head);
+/*Free a command line singly linked list.*/
 
 /* commands.c */
-int find_builtin_or_execute(Shell *shell) /*Find and execute a command.*/
-int execute_command(Shell *shell); /*Execute a command.*/
-int is_executable(Shell *shell) /*Check if a file is executable.*/
-char *find_command_location(char *command, char **environment); /*Find the location of a command.*/
-int is_directory_path(char *path, int *index); /*Check if a path is a directory in the current directory.*/
+int find_builtin_or_execute(Shell *shell);
+/*Find and execute a command.*/
+int execute_command(Shell *shell);
+/*Execute a command.*/
+int is_executable(Shell *shell);
+/*Check if a file is executable.*/
+char *find_command_location(char *command, char **environment);
+/*Find the location of a command.*/
+int is_directory_path(char *path, int *index);
+/*Check if a path is a directory in the current directory.*/
 
 /* environment.c */
 char *get_environment_variable(const char *variable_name, char **environment);
