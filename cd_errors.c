@@ -1,12 +1,12 @@
 #include "main.h"
 
 /**
- * change_directory_error - Print an error message for change directory error
+ * cd_error - Print an error message for change directory error
  * @shell: Shell structure.
  *
  * Return: Error message.
  */
-char *change_directory_error(Shell *shell)
+char *cd_error(Shell *shell)
 {
 	char *err, *message, *str = custom_itoa(shell->line_counter);
 	int id, len;
@@ -78,12 +78,12 @@ char *cd_error_concat(Shell *shell, char *message, char *error, char *line)
 }
 
 /**
- * path_error_message - Generate an error message for path_error.
+ * path_error - Generate an error message for path_error.
  * @shell: Shell structure.
  *
  * Return: Error message.
  */
-char *path_error_message(Shell *shell)
+char *path_error(Shell *shell)
 {
 	char *error, *str = custom_itoa(shell->line_counter);
 	int len = custom_strlen(shell->av[0]) + custom_strlen(str);

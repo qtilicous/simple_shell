@@ -1,13 +1,13 @@
 #include "main.h"
 
 /**
- * parse_command_lines - Parse and execute command lines.
+ * parse_commandl - Parse and execute command lines.
  * @shell: Shell structure.
  * @user_input: User input string.
  *
  * Return: 0 on exit, 1 to continue.
  */
-int parse_command_lines(Shell *shell, char *user_input)
+int parse_commandl(Shell *shell, char *user_input)
 {
 	int continue_execution;
 	Separator *separator_head = NULL, *current_separator;
@@ -51,12 +51,12 @@ int parse_command_lines(Shell *shell, char *user_input)
 }
 
 /**
- * parse_command_line - Tokenize the input string into command line arguments.
+ * parse_commandl - Tokenize the input string into command line arguments.
  * @user_input: Input string.
  *
  * Return: Parsed command line arguments.
  */
-char **parse_command_line(char *user_input)
+char **parse_commandl(char *user_input)
 {
 	char **parsed_t;
 	char *token;
@@ -129,14 +129,14 @@ void create_nodes(Separator **s_head, CommandLine **c_head, char *user_input)
 }
 
 /**
- * get_next_command_line - Get the next command line based on separators.
+ * next_commandl - Get the next command line based on separators.
  * @set: Separator list.
  * @com: Command line list.
  * @shell: Shell structure.
  *
  * Return: void, no return.
  */
-void get_next_command_line(Separator **set, CommandLine **com, Shell *shell)
+void next_commandl(Separator **set, CommandLine **com, Shell *shell)
 {
 	CommandLine *command_line = *com;
 	Separator *separator = *set;
