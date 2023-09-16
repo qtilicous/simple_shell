@@ -81,14 +81,14 @@ char *read_input(int *eof);
 ssize_t _getline(char **outp_buffer, size_t *outp_size, FILE *inp_stream);
 void _getline2(char **buffer, size_t *s, char *s_buffer, size_t inpsize);
 
-/* strings1.c */
+/* strings.c */
 char *copy_string(char *dest, char *src);
 char *concatenate_strings(char *dest, const char *src);
 char *duplicate_string(const char *str);
 int compare_strings(char *s1, char *s2);
 char *tokenize_string(char string[], const char *delimiter);
 
-/* strings2.c */
+/* converters.c */
 int count_digits(const char *str);
 int string_length(const char *str);
 char *integer_to_string(int num);
@@ -101,7 +101,6 @@ void *reallocate_mem(void *ptr, unsigned int old, unsigned int nw);
 void free_separator_list(Separator **head);
 void free_command_line_list(CommandLine **head);
 char **reallocate_dp(char **old_dp, unsigned int old, unsigned int nw);
-
 
 /* commands.c */
 int find_execommand(Shell *shell);
@@ -117,11 +116,11 @@ int _setenv(Shell *shell);
 int _unsetenv(Shell *shell);
 char *create_env_var(char *var_name, char *var_value);
 
-/* environment2.c */
-void set_cd_env_var(char *var_name, char *var_value, Shell *shell);
-void cd(Shell *shell);
+/* cd_environment.c */
 int compare_env_varname(const char *variable_name, const char *partial_name);
-char *get_cd_env_variable(const char *variable_name, char **environment);
+void set_cd(char *var_name, char *var_value, Shell *shell);
+void cd(Shell *shell);
+char *get_cd_env(const char *variable_name, char **environment);
 
 /* command_parser.c */
 int parse_commandl(Shell *shell, char *user_input);
@@ -130,11 +129,11 @@ void create_nodes(Separator **s_head, CommandLine **c_head, char *user_input);
 void next_commandl(Separator **set, CommandLine **com, Shell *shell);
 
 /* bonus.c */
-char *remove_non_print(char *user_input);
-char *restore_non_print(char *user_input);
+char *rm_non_print(char *user_input);
+char *rest_non_print(char *user_input);
 Separator *append_separator(Separator **head, char separator);
 CommandLine *append_commandl(CommandLine **head, char *cmd);
-int _strcmp(char string[], const char *delim);
+int compare_cs(char string[], const char *delim);
 
 /* errors_handling.c */
 char *exit_error(Shell *shell);

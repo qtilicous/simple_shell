@@ -1,19 +1,19 @@
 #include "main.h"
 
 /**
- * find_builtin_or_execute - Find and execute a command.
+ * find_execommand - Find and execute a command.
  * @shell: Shell structure.
  *
  * Return: 1 on success.
  */
 
-int find_builtin_or_execute(Shell *shell)
+int find_execommand(Shell *shell)
 {
 	int (*builtin_func)(Shell *shell);
 
-	if (shell->args[0] == NULL)
+	if (shell->pargs[0] == NULL)
 		return (1);
-	builtin_func = find_builtin(shell->args[0]);
+	builtin_func = get_builtin(shell->pargs[0]);
 	if (builtin_func != NULL)
 		return (builtin_func(shell));
 	return (execute_command(shell));
@@ -34,12 +34,12 @@ int execute_command(Shell *shell)
 
 	UNUSED(mypid);
 
-	executable = is_executable(shell);
+	executable = is_exe(shell);
 	switch (executable)
 	{
 		case 0:
-			cmd_directory = find_command_location(shell->args[0], shell->_environ);
-			if (check_command_error(cmd_directory, shell) == 1)
+			cmd_directory = find_command(shell->pargs[0], shell->_env);
+			if (command_error(cmd_directory, shell) == 1)
 				return (1);
 			break;
 		case -1:
@@ -50,37 +50,37 @@ int execute_command(Shell *shell)
 	{
 		case 0:
 			if (executable == 0)
-				cmd_directory = find_command_location(shell->args[0], shell->_environ);
+				cmd_directory = find_command(shell->pargs[0], shell->_env);
 			else
-				cmd_directory = shell->args[0];
-			execve(cmd_directory + executable, shell->args, shell->_environ);
+				cmd_directory = shell->pargs[0];
+			execve(cmd_directory + executable, shell->pargs, shell->_env);
 			break;
 		case -1:
-			perror(shell->av[0]);
+			perror(shell->args[0]);
 			return (1);
 		default:
 			do {
 				mypid = waitpid(pid, &shell_status, WUNTRACED);
 			} while (!WIFEXITED(shell_status) && !WIFSIGNALED(shell_status));
 	}
-	shell->shell_status = shell_status / 256;
+	shell->status = shell_status / 256;
 	return (1);
 }
 
 /**
- * is_executable - Check if a file is executable.
+ * is_exe - Check if a file is executable.
  * @shell: Shell structure.
  *
  * Return: 0 if it's not an executable, otherwise returns the index.
  */
 
-int is_executable(Shell *shell)
+int is_exe(Shell *shell)
 {
 	int i = 0, j;
 	char *user_input;
-	struct stat st;
+	struct stat stat;
 
-	user_input = shell->args[0];
+	user_input = shell->pargs[0];
 	while (user_input[i])
 	{
 		if (user_input[i] == 46)
@@ -106,75 +106,75 @@ int is_executable(Shell *shell)
 	j = i;
 	if (j == 0)
 		return (0);
-	if (stat(user_input + i, &st) == 0)
+	if (stat(user_input + i, &stat) == 0)
 		return (i);
 	errors(shell, 127);
 	return (-1);
 }
 
 /**
- * find_command_location - Find the location of a command.
+ * find_command - Find the location of a command.
  * @command: Command, e.g., ls.
  * @environment: Environment variable.
  *
  * Return: Location of the command or NULL if not found.
  */
 
-char *find_command_location(char *command, char **environment)
+char *find_command(char *command, char **env)
 {
-	int index = 0, dir_len, cmd_len;
-	char *cmd_path, *path_ptr, *path_token, *directory;
-	struct stat st;
+	int index = 0, dirl, cmdl;
+	char *pcmd, *pptr, *ptoken, *dir;
+	struct stat s;
 
-	cmd_path = get_env_var("PATH", environment);
+	pcmd = get_env_var("PATH", env);
 	if (cmd_path)
 	{
-		path_ptr = custom_duplicate_string(cmd_path);
-		cmd_len = custom_string_length(command);
-		path_token = custom_tokenize_string(path_ptr, ":");
+		pptr = duplicate_string(pcmd);
+		cmdl = string_length(command);
+		ptoken = tokenize_string(pptr, ":");
 
-		for (; path_token != NULL;)
+		for (; ptoken != NULL;)
 		{
-			if (is_directory_path(cmd_path, &index))
+			if (is_dir_path(pcmd, &index))
 			{
-				if (stat(command, &st) == 0)
+				if (stat(command, &s) == 0)
 					return (command);
 			}
-			dir_len = custom_string_length(path_token);
-			directory = malloc(cmd_len + 2 + dir_len);
-			custom_copy_string(directory, path_token);
-			custom_concatenate_strings(directory, "/");
-			custom_concatenate_strings(directory, command);
-			if (stat(directory, &st) == 0)
+			dirl = string_length(ptoken);
+			dir = malloc(cmdl + 2 + dirl);
+			copy_string(dir, ptoken);
+			concatenate_strings(dir, "/");
+			concatenate_strings(dir, command);
+			if (stat(dir, &s) == 0)
 			{
-				free(path_ptr);
-				return (directory);
+				free(pptr);
+				return (dir);
 			}
-			free(directory);
-			path_token = custom_tokenize_string(NULL, ":");
+			free(dir);
+			ptoken = tokenize_string(NULL, ":");
 		}
-		free(path_ptr);
-		if (stat(command, &st) == 0)
+		free(pptr);
+		if (stat(command, &s) == 0)
 			return (command);
 		return (NULL);
 	}
 	if (command[0] == 47)
 	{
-		if (stat(command, &st) == 0)
+		if (stat(command, &s) == 0)
 			return (command);
 	}
 	return (0);
 }
 
 /**
- * is_directory_path - Check if a path is a directory in the current directory.
+ * is_dir_path - Check if a path is a directory in the current directory.
  * @path: Pointer to the path.
  * @index: Pointer to the index.
  *
  * Return: 1 if the path is searchable in the current directory, 0 otherwise.
  */
 
-int is_directory_path(char *path, int *index)
+int is_dir_path(char *path, int *index)
 {
 	if (path[*index] == 58)
 		return (1);

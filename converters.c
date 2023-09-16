@@ -1,13 +1,13 @@
 #include "main.h"
 
 /**
- * custom_count_digits - Count the number of digits in an integer.
+ * count_digits - Count the number of digits in an integer.
  * @num: Input integer.
  *
  * Return: Number of digits in the integer.
  */
 
-int custom_count_digits(const int num)
+int count_digits(const int num)
 {
 	int digit_count = 1;
 	unsigned int absolute_num;
@@ -29,13 +29,13 @@ int custom_count_digits(const int num)
 }
 
 /**
- * custom_string_length - Get the length of a string.
+ * string_length - Get the length of a string.
  * @str: Pointer to a string of characters.
  *
  * Return: Length of the string.
  */
 
-int custom_string_length(const char *str)
+int string_length(const char *str)
 {
 	int str_length = 0;
 
@@ -45,17 +45,17 @@ int custom_string_length(const char *str)
 }
 
 /**
- * custom_integer_to_string - Convert an integer to a string.
+ * integer_to_string - Convert an integer to a string.
  * @num: Input integer.
  *
  * Return: Converted integer as a string.
  */
 
-char *custom_integer_to_string(int num)
+char *integer_to_string(int num)
 {
 	char *string_buffer;
 	unsigned int absolute_num;
-	int digit_count = custom_count_digits(num);
+	int digit_count = count_digits(num);
 
 	string_buffer = malloc((digit_count + 1) * sizeof(char));
 	if (string_buffer == NULL)
@@ -78,13 +78,13 @@ char *custom_integer_to_string(int num)
 }
 
 /**
- * custom_string_to_integer - Convert a string to an integer.
+ * string_to_integer - Convert a string to an integer.
  * @str: Input string.
  *
  * Return: Integer value.
  */
 
-int custom_string_to_integer(char *str)
+int string_to_integer(char *str)
 {
 	unsigned int length_count = 0, size = 0, i = 0, j = 1, k = 1, l;
 
@@ -111,13 +111,21 @@ int custom_string_to_integer(char *str)
 }
 
 /**
- * custom_is_digit - Check if a string represents a digit (0 through 9).
+ * is_digit - Check if a string represents a digit (0 through 9).
  * @character: Input character.
  *
  * Return: 1 if the character is a digit, 0 otherwise.
  */
 
-int custom_is_digit(const char character)
+int is_digit(const char character)
 {
-	return (character >= '0' && character <= '9');
+	unsigned int j = 0;
+
+	while (character[j])
+	{
+		if (character[j] < 48 || character[j] > 57)
+			return (0);
+		j++;
+	}
+	return (1);
 }

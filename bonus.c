@@ -1,13 +1,13 @@
 #include "main.h"
 
 /**
- * remove_non_printable - Replace non-printable characters with their codes.
+ * rm_non_print - Replace non-printable characters with their codes.
  * @user_input: Input string.
  *
  * Return: Modified string.
  */
 
-char *remove_non_printable(char *user_input)
+char *rm_non_print(char *user_input)
 {
 	int i = 0;
 
@@ -33,13 +33,13 @@ char *remove_non_printable(char *user_input)
 }
 
 /**
- * restore_non_printable - Restore non-printable characters from their codes.
+ * rest_non_print - Restore non-printable characters from their codes.
  * @user_input: Input string.
  *
  * Return: Restored string.
  */
 
-char *restore_non_printable(char *user_input)
+char *rest_non_printable(char *user_input)
 {
 	int i = 0;
 
@@ -53,21 +53,21 @@ char *restore_non_printable(char *user_input)
 }
 
 /**
- * append_separator_to_list - Append a separator to the list.
+ * append_separator - Append a separator to the list.
  * @head: Head of the separator linked list.
  * @separator: Separator (; | &).
  *
  * Return: Pointer to the head.
  */
 
-separator_t *append_separator_to_list(separator_t **head, char separator)
+Separator *append_separator(Separator **head, char separator)
 {
-	separator_t *new_node, *temp_node;
+	Separator *new_node, *temp_node;
 
-	new_node = malloc(sizeof(separator_t));
+	new_node = malloc(sizeof(Separator));
 	if (new_node == NULL)
 		return (NULL);
-	new_node->sep = separator;
+	new_node->symbol = separator;
 	new_node->next = NULL;
 	temp_node = *head;
 	if (temp_node == NULL)
@@ -84,21 +84,21 @@ separator_t *append_separator_to_list(separator_t **head, char separator)
 }
 
 /**
- * append_command_line_to_list - Append a command line to the list.
+ * append_command - Append a command line to the list.
  * @head: Head of the command line linked list.
  * @cmd: Command line.
  *
  * Return: Pointer to the head.
  */
 
-cmdline_t *append_command_line_to_list(cmdline_t **head, char *cmd)
+CommandLine *append_command(CommandLine **head, char *cmd)
 {
-	cmdline_t *new_node, *temp_node;
+	CommandLine *new_node, *temp_node;
 
-	new_node = malloc(sizeof(cmdline_t));
+	new_node = malloc(sizeof(CommandLine));
 	if (new_node == NULL)
 		return (NULL);
-	new_node->cmd_line = cmd;
+	new_node->line = cmd;
 	new_node->next = NULL;
 
 	temp_node = *head;
@@ -116,14 +116,14 @@ cmdline_t *append_command_line_to_list(cmdline_t **head, char *cmd)
 }
 
 /**
- * custom_strcmp - Custom string comparison.
+ * compare_cs - Chasr of strings comparison.
  * @string: Input string.
  * @delim: Delimiter.
  *
  * Return: 1 if they are equal, 0 if they are not.
  */
 
-int custom_strcmp(char string[], const char *delim)
+int compare_cs(char string[], const char *delim)
 {
 	unsigned int i, j, k, l, m;
 
