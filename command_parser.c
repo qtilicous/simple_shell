@@ -2,43 +2,43 @@
 
 /**
  * parse_commandl - Parse and execute command lines.
- * @shell: Shell structure.
+ * @sh: Shell structure.
  * @user_input: User input string.
  *
  * Return: 0 on exit, 1 to continue.
  */
-int parse_commandl(Shell *shell, char *user_input)
+int parse_commandl(shell_t *sh, char *user_input)
 {
 	int continue_execution;
-	Separator *separator_head = NULL, *current_separator;
-	CommandLine *command_line_head = NULL, *current_command_line;
+	separator_t *s_head = NULL, *s_current;
+	cline *c_head = NULL, *c_current;
 
-	create_command_line_nodes(&separator_head, &command_line_head, user_input);
-	current_separator = separator_head;
-	current_command_line = command_line_head;
+	create_nodes(&s_head, &c_head, user_input);
+	s_current = s_head;
+	c_current = c_head;
 
-	for (; current_command_line != NULL;)
+	for (; c_current != NULL;)
 	{
-		shell->user_input = current_command_line->cmd_line;
-		shell->args = parse_command_line(shell->user_input);
-		continue_execution = find_and_execute_command(shell);
-		free(shell->args);
+		sh->user_input = c_current->line;
+		sh->args = parse_commandl(sh->user_input);
+		continue_execution = find_execommand(sh);
+		free(sh->args);
 
 		if (continue_execution == 0)
 		{
 			break;
 		}
 
-		get_next_command_line(&current_separator, &current_command_line, shell);
+		next_commandl(&s_current, &c_current, sh);
 
-		if (current_command_line != NULL)
+		if (c_current != NULL)
 		{
-			current_command_line = current_command_line->next;
+			c_current = c_current->next;
 		}
 	}
 
-	free_separator(&separator_head);
-	free_command_line(&command_line_head);
+	free_separator_list(&s_head);
+	free_cline_list(&c_head);
 
 	switch (continue_execution)
 	{
@@ -51,12 +51,12 @@ int parse_commandl(Shell *shell, char *user_input)
 }
 
 /**
- * parse_commandl - Tokenize the input string into command line arguments.
+ * toke_commandl - Tokenize the input string into command line arguments.
  * @user_input: Input string.
  *
  * Return: Parsed command line arguments.
  */
-char **parse_commandl(char *user_input)
+char **toke_commandl(char *user_input)
 {
 	char **parsed_t;
 	char *token;
@@ -68,7 +68,7 @@ char **parse_commandl(char *user_input)
 		exit(EXIT_FAILURE);
 	}
 
-	token = custom_strtok(user_input, " \t\r\n\a");
+	token = tokenize_string(user_input, " \t\r\n\a");
 	parsed_t[0] = token;
 
 	for (i = 1; token != NULL; i++)
@@ -76,14 +76,14 @@ char **parse_commandl(char *user_input)
 		if (i == buffer_size)
 		{
 			buffer_size = buffer_size + buffer_size;
-			parsed_t = custom_reallocate_double_pointer(parsed_t, i, sizeof(char *));
+			parsed_t = reallocate_dp(parsed_t, i, sizeof(char *));
 			if (parsed_t == NULL)
 			{
 				exit(EXIT_FAILURE);
 			}
 		}
 
-		token = custom_strtok(NULL, " \t\r\n\a");
+		token = tokenize_string(NULL, " \t\r\n\a");
 		parsed_t[i] = token;
 	}
 
@@ -96,35 +96,35 @@ char **parse_commandl(char *user_input)
  * @c_head: Head of command line linked list.
  * @user_input: User input string.
  *
- * Return: void, no return.
+ * Return: nothing.
  */
-void create_nodes(Separator **s_head, CommandLine **c_head, char *user_input)
+void create_nodes(separator_t **s_head, cline_t **c_head, char *user_input)
 {
 	char *command_line;
-	int i;
+	int j;
 
-	user_input = remove_non_printed_characters(user_input);
+	user_input = rm_non_print(user_input);
 
-	i = 0;
+	j = 0;
 	while (user_input[i])
 	{
 		if (user_input[i] == ';')
 		{
-			add_separator_at_end(s_head, user_input[i]);
+			append_separator(s_head, user_input[i]);
 		}
 		if (user_input[i] == '|' || user_input[i] == '&')
 		{
-			add_separator_at_end(s_head, user_input[i]);
+			append_separator(s_head, user_input[i]);
 			i++;
 		}
 		i++;
 	}
 
-	command_line = custom_strtok(user_input, ";|&");
+	command_line = tokenize_string(user_input, ";|&");
 	do {
-		command_line = remove_non_printed_characters2(command_line);
-		add_command_line_at_end(c_head, command_line);
-		command_line = custom_strtok(NULL, ";|&");
+		command_line = rest_non_print(command_line);
+		append_commandl(c_head, command_line);
+		command_line = tokenize_string(NULL, ";|&");
 	} while (command_line != NULL);
 }
 
@@ -132,25 +132,25 @@ void create_nodes(Separator **s_head, CommandLine **c_head, char *user_input)
  * next_commandl - Get the next command line based on separators.
  * @set: Separator list.
  * @com: Command line list.
- * @shell: Shell structure.
+ * @sh: Shell structure.
  *
- * Return: void, no return.
+ * Return: Nothing.
  */
-void next_commandl(Separator **set, CommandLine **com, Shell *shell)
+void next_commandl(separator_t **set, cline_t **com, shell_t *sh)
 {
-	CommandLine *command_line = *com;
-	Separator *separator = *set;
-	int i, status = shell->shell_status;
+	cline_t *command_line = *com;
+	separator_t *separator = *set;
+	int i, s = sh->status;
 
 	for (i = 1; i && separator != NULL;)
 	{
-		if (status == 0)
+		if (s == 0)
 		{
-			if (separator->sep == '&' || separator->sep == ';')
+			if (separator->symbol == '&' || separator->symbol == ';')
 			{
 				i = 0;
 			}
-			if (separator->sep == '|')
+			if (separator->symbol == '|')
 			{
 				command_line = command_line->next;
 				separator = separator->next;
@@ -158,11 +158,11 @@ void next_commandl(Separator **set, CommandLine **com, Shell *shell)
 		}
 		else
 		{
-			if (separator->sep == '|' || separator->sep == ';')
+			if (separator->symbol == '|' || separator->symbol == ';')
 			{
 				i = 0;
 			}
-			if (separator->sep == '&')
+			if (separator->symbol == '&')
 			{
 				command_line = command_line->next;
 				separator = separator->next;

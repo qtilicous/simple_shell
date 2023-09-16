@@ -25,85 +25,84 @@ int compare_env_varname(const char *variable_name, const char *partial_name)
  * set_cd - Set an environment variable for cd function.
  * @var_name: Environment variable name (e.g., pwd, oldpwd, home).
  * @var_value: Environment variable value.
- * @shell: Shell structure.
+ * @sh: Shell structure.
  *
  * Return: Nothing.
  */
 
-void set_cd(char *var_name, char *var_value, Shell *shell)
+void set_cd(char *var_name, char *var_value, shell_t *sh)
 {
-	char *env_var, *env_name;
+	char *evar, *ename;
 	int i = 0, cmp;
 
-	while (shell->_env[i])
+	while (sh->_env[i])
 	{
-		env_var = duplicate_string(shell->_env[i]);
-		env_name = tokenize_string(env_var, "=");
-		cmp = compare_strings(env_name, var_name);
+		evar = duplicate_string(sh->_env[i]);
+		ename = tokenize_string(evar, "=");
+		cmp = compare_strings(ename, var_name);
 		if (cmp == 0)
 		{
-			free(shell->_env[i]);
-			shell->_env[i] = create_env_var(env_name, var_value);
-			free(env_var);
+			free(sh->_env[i]);
+			sh->_env[i] = create_env_var(ename, var_value);
+			free(evar);
 			return;
 		}
-		free(env_var);
+		free(evar);
 		i++;
 	}
-	shell->_env = reallocate_dp(shell->_env, i, (i + 2) * sizeof(char *));
-	shell->_env[i] = create_env_var(var_name, var_value);
-	shell->_env[i + 1] = NULL;
+	sh->_env = reallocate_dp(sh->_env, i, (i + 2) * sizeof(char *));
+	sh->_env[i] = create_env_var(var_name, var_value);
+	sh->_env[i + 1] = NULL;
 }
 
 /**
  * cd - Change the current directory
- * @shell: Shell structure.
+ * @sh: Shell structure.
  *
  * Return: Nothing.
  */
 
-void cd(Shell *shell)
+void cd(shell *sh)
 {
-	char *dir, *_pwdp, *cdir;
+	char *dir, *p, *c;
 	char pwd[PATH_MAX];
 
 	getcwd(pwd, sizeof(pwd));
-	dir = shell->pargs[1];
+	dir = sh->args[1];
 	if (chdir(dir) == -1)
 	{
-		handle_errors(shell, 2);
+		handle_errors(sh, 2);
 		return;
 	}
-	_pwdp = duplicate_string(pwd);
-	set_cd("OLDPWD", _pwdp, shell);
-	cdir = duplicate_string(dir);
-	set_cd("PWD", cdir, shell);
-	free(_pwdp);
-	free(cdir);
-	shell->status = 0;
+	p = duplicate_string(pwd);
+	set_cd("OLDPWD", p, sh);
+	c = duplicate_string(dir);
+	set_cd("PWD", c, sh);
+	free(p);
+	free(c);
+	sh->status = 0;
 	chdir(dir);
 }
 
-
 /**
  * get_cd_env - Get an environment variable for cd.
- * @variable_name: Name of the environment variable.
- * @environment: Environment variable array.
+ * @var_name: Name of the environment variable.
+ * @_env: Environment variable array.
  *
  * Return: Environment variable value, or NULL if not found.
  */
 
-char *get_cd_env(const char *variable_name, char **environment)
+char *get_cd_env(const char *var_name, char **_env)
 {
 	char *e = NULL;
 	int i = 0, j = 0;
 
-	while (environment[i])
+	while (_envt[i])
 	{
-		j = compare_env_varname(environment[i], variable_name);
+		j = compare_env_varname(_env[i], var_name);
 		if (j)
 		{
-			e = environment[i];
+			e = _env[i];
 			break;
 		}
 		i++;

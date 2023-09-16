@@ -2,16 +2,16 @@
 
 /**
  * cd_error - Print an error message for change directory error
- * @shell: Shell structure.
+ * @sh: Shell structure.
  *
  * Return: Error message.
  */
-char *cd_error(Shell *shell)
+char *cd_error(shell_t *sh)
 {
-	char *err, *message, *str = custom_itoa(shell->line_counter);
-	int id, len;
+	char *error, *message, *s = integer_to_string(sh->line_count);
+	int id, l;
 
-	if (shell->args[1][0] == '-')
+	if (sh->args[1][0] == '-')
 	{
 		message = ": Not a legal option ";
 		id = 2;
@@ -19,93 +19,93 @@ char *cd_error(Shell *shell)
 	else
 	{
 		message = ": can't cd to given directory ";
-		id = custom_strlen(shell->args[1]);
+		id = string_length(sh->args[1]);
 	}
 
-	len = custom_strlen(shell->av[0]) + custom_strlen(shell->args[0]);
-	len = len + custom_strlen(str) + custom_strlen(message) + id + 6;
+	l = string_length(sh->av[0]) + string_length(sh->args[0]);
+	l = l + string_length(s) + string_length(message) + id + 6;
 
-	err = malloc((len + 1) * sizeof(char));
-	if (err == 0)
+	error = malloc((l + 1) * sizeof(char));
+	if (error == 0)
 	{
-		free(str);
+		free(s);
 		return (NULL);
 	}
 
-	err = change_directory_error2(shell, message, err, str);
-	free(str);
+	error = cd_error_concat(sh, message, error, s);
+	free(s);
 
-	return (err);
+	return (error);
 }
 
 /**
  * cd_error_concat - Concatenate the error message for cd_error.
- * @shell: Shell structure.
+ * @sh: Shell structure.
  * @message: Message to show to the user.
  * @error: Output message.
  * @line: Line of string.
  *
  * Return: Error message.
  */
-char *cd_error_concat(Shell *shell, char *message, char *error, char *line)
+char *cd_error_concat(shell_t *sh, char *message, char *error, char *line)
 {
-	char *invalid;
+	char *i;
 
-	custom_strcpy(error, shell->av[0]);
-	custom_strcat(error, ": ");
-	custom_strcat(error, line);
-	custom_strcat(error, ": ");
-	custom_strcat(error, shell->args[0]);
-	custom_strcat(error, message);
+	copy_string(error, sh->av[0]);
+	concatenate_strings(error, ": ");
+	concatenate_strings(error, line);
+	concatenate_strings(error, ": ");
+	concatenate_strings(error, sh->args[0]);
+	concatenate_strings(error, message);
 
-	if (shell->args[1][0] == '-')
+	if (sh->args[1][0] == '-')
 	{
-		invalid = malloc(3);
-		invalid[0] = '-';
-		invalid[1] = shell->args[1][1];
-		invalid[2] = '\0';
-		custom_strcat(error, invalid);
-		free(invalid);
+		i = malloc(3);
+		i[0] = '-';
+		i[1] = sh->args[1][1];
+		i[2] = '\0';
+		concatenate_strings(error, i);
+		free(i);
 	}
 	else
 	{
-		custom_strcat(error, shell->args[1]);
+		concatenate_strings(error, sh->args[1]);
 	}
 
-	custom_strcat(error, "\n");
-	custom_strcat(error, "\0");
+	concatenate_strings(error, "\n");
+	concatenate_strings(error, "\0");
 	return (error);
 }
 
 /**
  * path_error - Generate an error message for path_error.
- * @shell: Shell structure.
+ * @sh: Shell structure.
  *
  * Return: Error message.
  */
-char *path_error(Shell *shell)
+char *path_error(shell *sh)
 {
-	char *error, *str = custom_itoa(shell->line_counter);
-	int len = custom_strlen(shell->av[0]) + custom_strlen(str);
+	char *error, *s = integer_to_string(sh->line_count);
+	int l = string_length(sh->av[0]) + string_length(s);
 
-	len = len + custom_strlen(shell->args[0]) + 25;
+	l = l + string_length(sh->args[0]) + 25;
 
 	error = malloc((len + 1) * sizeof(char));
 	if (error == 0)
 	{
 		free(error);
-		free(str);
+		free(s);
 		return (NULL);
 	}
 
-	custom_strcpy(error, shell->av[0]);
-	custom_strcat(error, ": ");
-	custom_strcat(error, str);
-	custom_strcat(error, ": ");
-	custom_strcat(error, shell->args[0]);
-	custom_strcat(error, ": Permission denied\n");
-	custom_strcat(error, "\0");
-	free(str);
+	copy_string(error, sh->av[0]);
+	concatenate_strings(error, ": ");
+	concatenate_strings(error, s);
+	concatenate_strings(error, ": ");
+	concatenate_strings(error, sh->args[0]);
+	concatenate_strings(error, ": Permission denied\n");
+	concatenate_strings(error, "\0");
+	free(s);
 
 	return (error);
 }

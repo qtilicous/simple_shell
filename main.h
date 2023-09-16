@@ -99,7 +99,7 @@ int is_digit(const char *character);
 void copy_memory(void *dest_ptr, const void *src_ptr, unsigned int size);
 void *reallocate_mem(void *ptr, unsigned int old, unsigned int nw);
 void free_separator_list(Separator **head);
-void free_command_line_list(CommandLine **head);
+void free_cline_list(CommandLine **head);
 char **reallocate_dp(char **old_dp, unsigned int old, unsigned int nw);
 
 /* commands.c */
@@ -111,48 +111,48 @@ int is_dir_path(char *path, int *index);
 
 /* environment.c */
 char *get_env_var(const char *var_name, char **env);
-int print_env_var(Shell *shell);
-int _setenv(Shell *shell);
-int _unsetenv(Shell *shell);
+int print_env_var(shell_t *sh);
+int _setenv(shell_t *sh);
+int _unsetenv(shell_t *sh);
 char *create_env_var(char *var_name, char *var_value);
 
 /* cd_environment.c */
 int compare_env_varname(const char *variable_name, const char *partial_name);
-void set_cd(char *var_name, char *var_value, Shell *shell);
+void set_cd(char *var_name, char *var_value, shell_t *sh);
 void cd(Shell *shell);
-char *get_cd_env(const char *variable_name, char **environment);
+char *get_cd_env(const char *var_name, char **_env);
 
 /* command_parser.c */
-int parse_commandl(Shell *shell, char *user_input);
-char **parse_commandl(char *user_input);
-void create_nodes(Separator **s_head, CommandLine **c_head, char *user_input);
-void next_commandl(Separator **set, CommandLine **com, Shell *shell);
+int parse_commandl(shell_t *sh, char *user_input);
+char **toke_commandl(char *user_input);
+void create_nodes(separator_t **s_head, cline_t **c_head, char *user_input);
+void next_commandl(separator_t **set, cline_t **com, shell_t *sh);
 
-/* bonus.c */
+/* utils.c */
 char *rm_non_print(char *user_input);
 char *rest_non_print(char *user_input);
-separator_t *append_separator(separator_t **head, char separator);
-cline_t *append_commandl(cline_t **head, char *cmd);
-int compare_cs(char string[], const char *delim);
+separator_t *append_separator(separator_t **head, char sep);
+CommandLine *append_commandl(CommandLine **head, char *cmd);
+int compare_cs(char str[], const char *lim);
 
 /* errors_handling.c */
-char *exit_error(Shell *shell);
-char *env_error(Shell *shell);
-int handle_errors(Shell *shell, int error);
-int command_error(char *directory, Shell *shell);
-char *not_found_error(Shell *shell);
+char *exit_error(shell_t *sh);
+char *env_error(shell_t *sh);
+int handle_errors(shell_t *sh, int error);
+int command_error(char *directory, shell_t *sh);
+char *not_found_error(shell_t *sh);
 
 /* cd_errors.c */
-char *cd_error(Shell *shell);
-char *cd_error_concat(Shell *shell, char *message, char *error, char *line);
-char *path_error(Shell *shell);
+char *cd_error(shell_t *sh);
+char *cd_error_concat(shell_t *sh, char *message, char *error, char *line);
+char *path_error(shell_t *sh);
 
 /* builtins.c */
-int change_directory(Shell *shell);
-void previous_dir(Shell *shell);
-void home_dir(Shell *shell);
-int (*get_builtin(char *command))(Shell *);
-int shell_exit(Shell *shell);
+int change_directory(shell_t *sh);
+void previous_dir(shell_t *sh);
+void home_dir(shell_t *sh);
+int (*get_builtin(char *cmd))(shell_t *)
+int shell_exit(shell_t *sh);
 
 #endif
 

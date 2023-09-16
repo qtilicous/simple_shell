@@ -1,32 +1,32 @@
 #include "main.h"
 
 /**
- * exit_error - Generate an error message for exit shell.
- * @shell: Shell structure.
+ * exit_error - Generate an error message for shell exit.
+ * @sh: Shell structure.
  *
  * Return: Error message.
  */
-char *exit_error(Shell *shell)
+char *exit_error(shell_t *sh)
 {
-	char *error, *str = custom_itoa(shell->line_counter);
-	int len = custom_strlen(shell->av[0]) + custom_strlen(str);
+	char *error, *str = integer_to_string(sh->line_count);
+	int l = string_length(shell->av[0]) + string_length(str);
 
-	len += custom_strlen(shell->args[0]) + custom_strlen(shell->args[1]) + 23;
-	error = malloc(sizeof(char) * (len + 1));
+	len += string_length(sh->args[0]) + string_length(sh->args[1]) + 23;
+	error = malloc(sizeof(char) * (l + 1));
 	if (error == 0)
 	{
 		free(str);
 			return (NULL);
 	}
 
-	custom_strcpy(error, shell->av[0]);
-	custom_strcat(error, ": ");
-	custom_strcat(error, str);
-	custom_strcat(error, ": ");
-	custom_strcat(error, shell->args[0]);
-	custom_strcat(error, ": Illegal number: ");
-	custom_strcat(error, shell->args[1]);
-	custom_strcat(error, "\n\0");
+	copy_string(error, sh->av[0]);
+	concatenate_strings(error, ": ");
+	concatenate_strings(error, str);
+	concatenate_strings(error, ": ");
+	concatenate_strings(error, sh->args[0]);
+	concatenate_strings(error, ": Illegal number: ");
+	concatenate_strings(error, sh->args[1]);
+	concatenate_strings(error, "\n\0");
 	free(str);
 
 	return (error);
@@ -34,123 +34,123 @@ char *exit_error(Shell *shell)
 
 /**
  * env_error - Generate an error message for environment variable error
- * @shell: Shell structure.
+ * @sh: Shell structure.
  *
  * Return: Error message.
  */
-char *env_error(Shell *shell)
+char *env_error(shell_t *sh)
 {
-	char *err;
-	char *str = custom_itoa(shell->line_counter);
+	char *error;
+	char *s = integer_to_string(sh->line_count);
 	char *message = ": Unable to add or change or remove env\n";
-	int len;
+	int l;
 
-	len = custom_strlen(shell->av[0]) + custom_strlen(str);
-	len = len + custom_strlen(shell->args[0]) + custom_strlen(message) + 5;
+	l = string_length(sh->av[0]) + string_length(s);
+	l = l + string_length(sh->args[0]) + string_length(message) + 5;
 
-	err = malloc((len + 1) * sizeof(char));
-	if (err == 0)
+	error = malloc((l + 1) * sizeof(char));
+	if (error == 0)
 	{
-		free(err);
-		free(str);
+		free(error);
+		free(s);
 		return (NULL);
 	}
 
-	custom_strcpy(err, shell->av[0]);
-	custom_strcat(err, ": ");
-	custom_strcat(err, str);
-	custom_strcat(err, ": ");
-	custom_strcat(err, shell->args[0]);
-	custom_strcat(err, message);
-	custom_strcat(err, "\0");
-	free(str);
+	copy_string(error, sh->av[0]);
+	concatenate_strings(error, ": ");
+	concatenate_strings(error, s);
+	concatenate_strings(error, ": ");
+	concatenate_strings(error, sh->args[0]);
+	concatenate_strings(error, message);
+	concatenate_strings(error, "\0");
+	free(s);
 
-	return (err);
+	return (error);
 }
 
 /**
  * handle_errors - Handle and display errors.
- * @shell: Shell structure.
+ * @sh: Shell structure.
  * @error: Error code.
  *
  * Return: Error code.
  */
-int handle_errors(Shell *shell, int error)
+int handle_errors(shell_t *sh, int error)
 {
 	char *err;
-	int cd_check = custom_strcmp("cd", shell->args[0]);
-	int exit_check = custom_strcmp("exit", shell->args[0]);
+	int check = compare_strings("cd", sh->args[0]);
+	int exit = compare_strings("exit", sh->args[0]);
 
 	if (error == 127)
 	{
-		err = command_not_found_error(shell);
+		err = not_found_error(sh);
 	}
 	if (error == 126)
 	{
-		err = environment_error(shell);
+		err = path_error(sh);
 	}
 	if (error == -1)
 	{
-		err = change_directory_error(shell);
+		err = env_error(sh);
 	}
 	if (error == 2)
 		{
-		if (cd_check == 0)
+		if (check == 0)
 		{
-			err = change_directory_error(shell);
+			err = cd_error(sh);
 		}
-		else if (exit_check == 0)
+		else if (exit == 0)
 		{
-			err = exit_error(shell);
+			err = exit_error(sh);
 		}
 	}
 
 	if (err)
 	{
-		write(STDERR_FILENO, err, custom_strlen(err));
+		write(STDERR_FILENO, err, string_length(err));
 		free(err);
 	}
 
-	shell->shell_status = error;
+	sh->status = error;
 
 	return (error);
 }
 
 /**
  * command_error - Check for command execution errors.
- * @directory: Pointer to the destination directory.
- * @shell: Shell structure.
+ * @ddir: Pointer to the destination directory.
+ * @sh: Shell structure.
  *
  * Return: 1 if there is an error, 0 if not.
  */
-int command_error(char *directory, Shell *shell)
+int command_error(char *ddir, shell_t *sh)
 {
 	int i, j, k;
 
-	if (directory == NULL)
+	if (ddir == NULL)
 	{
-		handle_errors(shell, 127);
+		handle_errors(sh, 127);
 			return (1);
 	}
 
-	i = custom_strcmp(shell->args[0], directory);
+	i = compare_strings(sh->args[0], ddir);
 	if (i != 0)
 	{
-		j = access(directory, X_OK);
+		j = access(ddir, X_OK);
 		if (j == -1)
 		{
-			handle_errors(shell, 126);
-			free(directory);
+			handle_errors(sh, 126);
+			free(ddir);
 				return (1);
 		}
-		free(directory);
+		free(ddir);
 	}
 	else
 	{
-		k = access(shell->args[0], X_OK);
+		k = access(sh->args[0], X_OK);
 		if (k == -1)
 		{
-			handle_errors(shell, 126);
+			handle_errors(sh, 126);
 				return (1);
 		}
 	}
@@ -160,36 +160,36 @@ int command_error(char *directory, Shell *shell)
 
 /**
  * not_found_error - Generate an error message for command not found.
- * @shell: Shell structure.
+ * @sh: Shell structure.
  *
  * Return: Error message.
  */
-char *not_found_error(Shell *shell)
+char *not_found_error(shell_t *sh)
 {
-	char *err, *str = custom_itoa(shell->line_counter);
+	char *error, *s = integer_to_string(sh->line_count);
 	int str_length;
 
-	str_length = custom_strlen(shell->av[0]) + custom_strlen(str);
-	str_length = str_length + custom_strlen(shell->args[0]) + 18;
+	str_length = string_length(sh->av[0]) + string_length(s);
+	str_length = str_length + string_length(sh->args[0]) + 18;
 
-	err = malloc((str_length + 1) * sizeof(char));
-	if (err == 0)
+	error = malloc((str_length + 1) * sizeof(char));
+	if (error == 0)
 	{
-		free(err);
-		free(str);
+		free(error);
+		free(s);
 		return (NULL);
 	}
 
-	custom_strcpy(err, shell->av[0]);
-	custom_strcat(err, ": ");
-	custom_strcat(err, str);
-	custom_strcat(err, ": ");
+	copy_string(error, sh->av[0]);
+	concatenate_strings(error, ": ");
+	concatenate_strings(error, s);
+	concatenate_strings(error, ": ");
 
-	custom_strcat(err, shell->args[0]);
-	custom_strcat(err, ": not found\n");
-	custom_strcat(err, "\0");
-	free(str);
+	concatenate_strings(error, sh->args[0]);
+	concatenate_strings(error, ": not found\n");
+	concatenate_strings(error, "\0");
+	free(s);
 
-	return (err);
+	return (error);
 }
 

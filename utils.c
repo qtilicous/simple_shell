@@ -39,7 +39,7 @@ char *rm_non_print(char *user_input)
  * Return: Restored string.
  */
 
-char *rest_non_printable(char *user_input)
+char *rest_non_print(char *user_input)
 {
 	int i = 0;
 
@@ -55,85 +55,85 @@ char *rest_non_printable(char *user_input)
 /**
  * append_separator - Append a separator to the list.
  * @head: Head of the separator linked list.
- * @separator: Separator (; | &).
+ * @sep: Separator (; | &).
  *
  * Return: Pointer to the head.
  */
 
-Separator *append_separator(Separator **head, char separator)
+separator_t *append_separator(separator_t **head, char sep)
 {
-	Separator *new_node, *temp_node;
+	separator_t *new, *temp;
 
-	new_node = malloc(sizeof(Separator));
-	if (new_node == NULL)
+	new = malloc(sizeof(separator_t));
+	if (new == NULL)
 		return (NULL);
-	new_node->symbol = separator;
-	new_node->next = NULL;
-	temp_node = *head;
-	if (temp_node == NULL)
-		*head = new_node;
+	new->symbol = sep;
+	new->next = NULL;
+	temp = *head;
+	if (temp == NULL)
+		*head = new;
 	else
 	{
-		while (temp_node->next != NULL)
+		while (temp->next != NULL)
 		{
-			temp_node = temp_node->next;
+			temp = temp->next;
 		}
-		temp_node->next = new_node;
+		temp->next = new;
 	}
 	return (*head);
 }
 
 /**
- * append_command - Append a command line to the list.
+ * append_commandl - Append a command line to the list.
  * @head: Head of the command line linked list.
- * @cmd: Command line.
+ * @cl: Command line.
  *
  * Return: Pointer to the head.
  */
 
-CommandLine *append_command(CommandLine **head, char *cmd)
+cline *append_commandl(cline_t **head, char *cl)
 {
-	CommandLine *new_node, *temp_node;
+	cline *new, *temp;
 
-	new_node = malloc(sizeof(CommandLine));
-	if (new_node == NULL)
+	new = malloc(sizeof(cline_t));
+	if (new == NULL)
 		return (NULL);
-	new_node->line = cmd;
-	new_node->next = NULL;
+	new->line = cl;
+	new->next = NULL;
 
-	temp_node = *head;
-	if (temp_node == NULL)
-		*head = new_node;
+	temp = *head;
+	if (temp == NULL)
+		*head = new;
 	else
 	{
-		while (temp_node->next != NULL)
+		while (temp->next != NULL)
 		{
-			temp_node = temp_node->next;
+			temp = temp->next;
 		}
-		temp_node->next = new_node;
+		temp->next = new
 	}
 	return (*head);
 }
 
 /**
  * compare_cs - Chasr of strings comparison.
- * @string: Input string.
- * @delim: Delimiter.
+ * @str: Input string.
+ * @lim: Delimiter.
  *
  * Return: 1 if they are equal, 0 if they are not.
  */
 
-int compare_cs(char string[], const char *delim)
+int compare_cs(char str[], const char *lim)
 {
 	unsigned int i, j, k, l, m;
 
 	l = 0;
 	m = 0;
-	for (i = 0, k = 0; string[i]; i++)
+	for (i = 0, k = 0; str[i]; i++)
 	{
-		for (j = 0; delim[j]; j++)
+		for (j = 0; lim[j]; j++)
 		{
-			if (string[i] == delim[j])
+			if (str[i] == lim[j])
 			{
 				k++;
 				break;
