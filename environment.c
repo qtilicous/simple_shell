@@ -2,23 +2,23 @@
 
 /**
  * get_env_var - Get an environment variable value.
- * @env_name: Name of the environment variable.
- * @environment: Environment variable array.
+ * @var_name: Name of the environment variable.
+ * @env: Environment variable array.
  *
  * Return: Value of the environment variable.
  */
-char *get_env_var(const char *env_name, char **environment)
+char *get_env_var(const char *var_name, char **env)
 {
 	int i = 0, j = 0, found = 0;
 	char *env_ptr = NULL;
 	const char *cmp_env;
 
-	while (environment[i])
+	while (env[i])
 	{
-		cmp_env = environment[i];
+		cmp_env = env[i];
 		while (cmp_env[j] != '=')
 		{
-			if (cmp_env[j] != env_name[j])
+			if (cmp_env[j] != var_name[j])
 			{
 				found = 0;
 				break;
@@ -29,7 +29,7 @@ char *get_env_var(const char *env_name, char **environment)
 
 		if (found)
 		{
-			env_ptr = environment[i];
+			env_ptr = env[i];
 			break;
 		}
 
@@ -40,12 +40,12 @@ char *get_env_var(const char *env_name, char **environment)
 }
 
 /**
- * print_environment_vars - Print environment variables.
+ * print_env_var - Print environment variables.
  * @shell: Shell structure.
  *
  * Return: 1 on success.
  */
-int print_environment_vars(Shell *shell)
+int print_env_var(Shell *shell)
 {
 	int i = 0, j;
 
@@ -65,12 +65,12 @@ int print_environment_vars(Shell *shell)
 }
 
 /**
- * set_environment_var - Set an environment variable.
+ * _setenv - Set an environment variable.
  * @shell: Shell structure.
  *
  * Return: 1 on success, error message on failure.
  */
-int set_environment_var(Shell *shell)
+int _setenv(Shell *shell)
 {
 	Shell *shell_ptr;
 	char *var_name, *var_value, *env_var, *env_name;
@@ -111,12 +111,12 @@ int set_environment_var(Shell *shell)
 }
 
 /**
- * unset_environment_var - Unset an environment variable.
+ * _unsetenv - Unset an environment variable.
  * @shell: Shell structure.
  *
  * Return: 1 on success, error message on failure.
  */
-int unset_environment_var(Shell *shell)
+int _unsetenv(Shell *shell)
 {
 	char **env_rel;
 	int i, j, check = -1;
@@ -161,16 +161,16 @@ int unset_environment_var(Shell *shell)
 }
 
 /**
- * create_environment - Create a new environment variable.
- * @name: Name of the environment variable.
- * @value: Value of the environment variable.
+ * create_env_var - Create a new environment variable.
+ * @var_name: Name of the environment variable.
+ * @var_value: Value of the environment variable.
  *
  * Return: New environment variable.
  */
-char *create_environment(char *name, char *value)
+char *create_env_var(char *var_name, char *var_value)
 {
 	char *create;
-	int env = custom_string_length(name), val = custom_string_length(value);
+	int env = custom_string_length(var_name), val = custom_string_length(var_value);
 
 	create = malloc((env + val + 2) * sizeof(char));
 	if (create == NULL)
@@ -179,9 +179,9 @@ char *create_environment(char *name, char *value)
 		return (NULL);
 	}
 
-	custom_copy_string(create, name);
+	custom_copy_string(create, var_name);
 	custom_concatenate_strings(create, "=");
-	custom_concatenate_strings(create, value);
+	custom_concatenate_strings(create, var_value);
 
 	return (create);
 }

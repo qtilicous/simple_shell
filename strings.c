@@ -1,13 +1,13 @@
 #include "main.h"
 
 /**
- * custom_copy_string - Copy the source string to the destination.
+ * copy_string - Copy the source string to the destination.
  * @dest: Pointer to the destination string.
  * @src: Pointer to the source string.
  *
  * Return: Pointer to the destination string.
  */
-char *custom_copy_string(char *dest, char *src)
+char *copy_string(char *dest, char *src)
 {
 	size_t i = 0;
 
@@ -23,13 +23,13 @@ char *custom_copy_string(char *dest, char *src)
 }
 
 /**
- * custom_concatenate_strings - Concatenate two strings.
+ * concatenate_strings - Concatenate two strings.
  * @dest: Pointer to the destination string.
  * @src: Pointer to the source string.
  *
  * Return: Pointer to the destination string.
  */
-char *custom_concatenate_strings(char *dest, const char *src)
+char *concatenate_strings(char *dest, const char *src)
 {
 	int i, j = 0;
 
@@ -49,12 +49,12 @@ char *custom_concatenate_strings(char *dest, const char *src)
 }
 
 /**
- * custom_duplicate_string - Duplicate a string in memory.
+ * duplicate_string - Duplicate a string in memory.
  * @str: Pointer to the original string.
  *
  * Return: Pointer to the duplicated string in memory.
  */
-char *custom_duplicate_string(const char *str)
+char *duplicate_string(const char *str)
 {
 	size_t str_length;
 	char *new_str;
@@ -73,13 +73,13 @@ char *custom_duplicate_string(const char *str)
 }
 
 /**
- * custom_compare_strings - Compare two strings.
+ * compare_strings - Compare two strings.
  * @s1: Pointer to the first string.
  * @s2: Pointer to the second string.
  *
  * Return: 0 if both strings are equal, otherwise the difference.
  */
-int custom_compare_strings(char *s1, char *s2)
+int compare_strings(char *s1, char *s2)
 {
 	int i = 0, diff = 0;
 
@@ -98,25 +98,25 @@ int custom_compare_strings(char *s1, char *s2)
 }
 
 /**
- * custom_tokenize_string - Tokenize a string using a delimiter.
- * @input_string: Input string.
+ * tokenize_string - Tokenize a string using a delimiter.
+ * @string: Input string.
  * @delimiter: Delimiter string.
  *
  * Return: Tokenized string.
  */
-char *custom_tokenize_string(char input_string[], const char *delimiter)
+char *tokenize_string(char string[], const char *delimiter)
 {
 	unsigned int i, j;
 	static char *token_start, *token_end;
 	char *token;
 
-	if (input_string != NULL)
+	if (string != NULL)
 	{
-		if (custom_charcmp(input_string, delimiter))
+		if (custom_charcmp(string, delimiter))
 			return (NULL);
-		token_start = input_string;
-		i = custom_string_length(input_string);
-		token_end = &input_string[i];
+		token_start = string;
+		i = custom_string_length(string);
+		token_end = &string[i];
 	}
 	token = token_start;
 	if (token == token_end)

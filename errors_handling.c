@@ -1,12 +1,12 @@
 #include "main.h"
 
 /**
- * exit_error_message - Generate an error message for exit shell.
+ * exit_error - Generate an error message for exit shell.
  * @shell: Shell structure.
  *
  * Return: Error message.
  */
-char *exit_error_message(Shell *shell)
+char *exit_error(Shell *shell)
 {
 	char *error, *str = custom_itoa(shell->line_counter);
 	int len = custom_strlen(shell->av[0]) + custom_strlen(str);
@@ -33,12 +33,12 @@ char *exit_error_message(Shell *shell)
 }
 
 /**
- * environment_error - Generate an error message for environment variable error
+ * env_error - Generate an error message for environment variable error
  * @shell: Shell structure.
  *
  * Return: Error message.
  */
-char *environment_error(Shell *shell)
+char *env_error(Shell *shell)
 {
 	char *err;
 	char *str = custom_itoa(shell->line_counter);
@@ -117,13 +117,13 @@ int handle_errors(Shell *shell, int error)
 }
 
 /**
- * check_command_error - Check for command execution errors.
+ * command_error - Check for command execution errors.
  * @directory: Pointer to the destination directory.
  * @shell: Shell structure.
  *
  * Return: 1 if there is an error, 0 if not.
  */
-int check_command_error(char *directory, Shell *shell)
+int command_error(char *directory, Shell *shell)
 {
 	int i, j, k;
 
@@ -159,12 +159,12 @@ int check_command_error(char *directory, Shell *shell)
 }
 
 /**
- * command_not_found_error - Generate an error message for command not found.
+ * not_found_error - Generate an error message for command not found.
  * @shell: Shell structure.
  *
  * Return: Error message.
  */
-char *command_not_found_error(Shell *shell)
+char *not_found_error(Shell *shell)
 {
 	char *err, *str = custom_itoa(shell->line_counter);
 	int str_length;
