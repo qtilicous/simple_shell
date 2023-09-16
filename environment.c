@@ -103,7 +103,7 @@ int set_environment_var(Shell *shell)
 		i++;
 	}
 
-	shell_ptr->_environ = custom_reallocate_double_pointer(shell_ptr->_environ, i, sizeof(char *) * (i + 2));
+	shell_ptr->_environ = reallocate_dp(shell_ptr->_environ, i, sizeof(char *) * (i + 2));
 	shell_ptr->_environ[i] = create_environment(var_name, var_value);
 	shell_ptr->_environ[i + 1] = NULL;
 

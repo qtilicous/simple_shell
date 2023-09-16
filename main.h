@@ -12,14 +12,11 @@
 
 #define UNUSED(x) (void)(x)
 
-extern char **custom_environment;
+extern char **envment;
 
 typedef struct Shell Shell;
-
 typedef struct Builtins Builtins;
-
 typedef struct Separator Separator;
-
 typedef struct CommandLine CommandLine;
 
 /**
@@ -35,13 +32,13 @@ typedef struct CommandLine CommandLine;
 
 struct Shell
 {
-char **args;
-char *user_input;
-char **parsed_args;
-char *pid_str;
-char **environment;
-int status;
-int line_count;
+	char **args;
+	char *user_input;
+	char **pargs;
+	char *pid_str;
+	char **_env;
+	int status;
+	int line_count;
 };
 
 /**
@@ -52,8 +49,8 @@ int line_count;
 
 struct Builtins
 {
-char *name;
-int (*function)(Shell *shell);
+	char *name;
+	int (*function)(Shell *shell);
 };
 /**
 * struct CommandLine - Structure for a single linked list of command lines.
@@ -63,8 +60,8 @@ int (*function)(Shell *shell);
 */
 struct CommandLine
 {
-char *line;
-struct CommandLine *next;
+	char *line;
+	struct CommandLine *next;
 };
 
 /**
@@ -75,14 +72,14 @@ struct CommandLine *next;
 */
 struct Separator
 {
-char symbol;
-struct Separator *next;
+	char symbol;
+	struct Separator *next;
 };
 
 /* scan.c */
-char *read_user_input(int *eof);
-ssize_t custom_getline(char **outp_buffer, size_t *outp_size, FILE *inp_stream);
-void custom_getline2(char **buffer, size_t *s, char *s_buffer, size_t inpsize);
+char *read_input(int *eof);
+ssize_t _getline(char **outp_buffer, size_t *outp_size, FILE *inp_stream);
+void _getline2(char **buffer, size_t *s, char *s_buffer, size_t inpsize);
 
 /* strings1.c */
 char *custom_copy_string(char *dest, char *src);
@@ -101,13 +98,13 @@ int custom_is_digit(const char *character);
 /* memory.c */
 void custom_copy_memory(void *dest_ptr, const void *src_ptr, unsigned int size)
 void *custom_reallocate_memory(void *ptr, unsigned int old, unsigned int nw)
-void custom_free_separator_list(separator_t **head)
-void custom_free_command_line_list(cmdline_t **head)
+void custom_free_separator_list(Separator **head)
+void custom_free_command_line_list(CommandLine **head)
 char **reallocate_dp(char **old_double_ptr, unsigned int old, unsigned int nw)
 
 
 /* commands.c */
-int find_executable_command(Shell *shell;
+int find_executable_command(Shell *shell);
 int execute_command(Shell *shell);
 int is_command_executable(Shell *shell);
 char *find_command_location(char *command, char **environment);
@@ -135,28 +132,28 @@ void get_next_command_line(Separator **set, CommandLine **com, Shell *shell);
 /* bonus.c */
 char *remove_non_printable(char *user_input);
 char *restore_non_printable(char *user_input);
-separator_t *append_separator_to_list(separator_t **head, char separator);
-cmdline_t *append_command_line_to_list(cmdline_t **head, char *cmd);
+Separator *append_separator_to_list(Separator **head, char separator);
+CommandLine *append_command_line_to_list(CommandLine **head, char *cmd);
 int custom_strcmp(char string[], const char *delim);
 
-/* errors1.c */
-int check_command_error(char *directory, Shell *shell);
-int handle_errors(Shell *shell, int error);
-char *command_not_found_error(Shell *shell);
+/* errors_handling.c */
+char *exit_error_message(Shell *shell);
 char *environment_error(Shell *shell);
-char *change_directory_error(Shell *shell);
+int handle_errors(Shell *shell, int error);
+int check_command_error(char *directory, Shell *shell);
+char *command_not_found_error(Shell *shell);
 
-/* errors2.c */
-char *change_directory_error2(Shell *shell, char *message, char *error, char *path);
-char *path_error(Shell *shell);
-char *exit_error(Shell *shell);
+/* cd_errors.c */
+char *change_directory_error(Shell *shell);
+char *cd_error_concat(Shell *shell, char *message, char *error, char *line);
+char *path_error_message(Shell *shell);
 
 /* builtins.c */
-int (*find_builtin_command(char *command))(Shell *shell);
-int exit_shell(Shell *shell);
-int change_current_directory(Shell *shell);
-void go_to_home_directory(Shell *shell);
-void go_to_previous_directory(Shell *shell);
+int change_directory(Shell *shell);
+void previous_dir(Shell *shell);
+void home_dir(Shell *shell);
+int (*get_builtin(char *command))(Shell *);
+int shell_exit(Shell *shell);
 
 #endif
 
