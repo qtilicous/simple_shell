@@ -1,7 +1,7 @@
 #include "main.h"
 
 /**
- * read_input - Read user input from stdin.
+ * read_input - Read user input.
  * @eof: Pointer to the end-of-file indicator.
  *
  * Return: User input string.
@@ -102,7 +102,7 @@ void _getline2(char **buffer, size_t *s, char *s_buffer, size_t inpsize)
 	}
 	else
 	{
-		custom_copy_string(*buffer, s_buffer);
+		copy_string(*buffer, s_buffer);
 		free(s_buffer);
 	}
 }

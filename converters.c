@@ -60,7 +60,7 @@ char *integer_to_string(int num)
 	string_buffer = malloc((digit_count + 1) * sizeof(char));
 	if (string_buffer == NULL)
 		return (NULL);
-	string_buffer[digit_count] = '\0';
+	string_buffer[digit_count] = 0;
 	if (num < 0)
 	{
 		absolute_num = num * -1;
@@ -88,7 +88,7 @@ int string_to_integer(char *str)
 {
 	unsigned int length_count = 0, size = 0, i = 0, j = 1, k = 1, l;
 
-	while (*(str + length_count) != '\0')
+	while (*(str + length_count) != 0)
 	{
 		if (size > 0 && (*(str + length_count) < '0' || *(str + length_count) > '9'))
 			break;
@@ -123,7 +123,7 @@ int is_digit(const char character)
 
 	while (character[j])
 	{
-		if (character[j] < 48 || character[j] > 57)
+		if (character[j] < '0' || character[j] > '9')
 			return (0);
 		j++;
 	}

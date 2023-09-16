@@ -6,12 +6,12 @@
  * @src_ptr: Source pointer.
  * @size: Size of the memory to copy.
  *
- * Return: void, no return.
+ * Return: Nothing.
  */
 void copy_memory(void *dest_ptr, const void *src_ptr, unsigned int size)
 {
 	char *dest = (char *)dest_ptr;
-	const char *src = (const char *)src_ptr;
+	char *src = (char *)src_ptr;
 
 	unsigned int i = 0;
 
@@ -32,81 +32,83 @@ void copy_memory(void *dest_ptr, const void *src_ptr, unsigned int size)
  */
 void *reallocate_mem(void *ptr, unsigned int old, unsigned int nw)
 {
-	unsigned int i;
-	char **new_double_ptr;
+	void *nwm_ptr;
 
-	if (old_double_ptr == NULL)
+	if (ptr == NULL)
 	{
-		return (malloc(nw * sizeof(char *)));
+		return (malloc(nw));
+	}
+	if (nw == 0)
+	{
+		free(ptr);
+		return (NULL);
 	}
 	if (nw == old)
 	{
-		return (old_double_ptr);
+		return (ptr);
 	}
-
-	new_double_ptr = malloc(nw * sizeof(char *));
-	if (new_double_ptr == NULL)
+	nwm_ptr = malloc(nw);
+	if (nwm_ptr == NULL)
 	{
 		return (NULL);
 	}
-
-	i = 0;
-	while (i < old)
+	if (nw < old)
 	{
-		new_double_ptr[i] = old_double_ptr[i];
-		i++;
+		copy_memory(nwm_ptr, ptr, nw);
 	}
-
-	free(old_double_ptr);
-
-	return (new_double_ptr);
+	else
+	{
+		copy_memory(nwm_ptr, ptr, old);
+	}
+	free(ptr);
+	return (nwm_ptr);
 }
 
 /**
  * free_separator_list - Free a separator singly linked list.
- * @head: Head of the linked list.
+ * @start: Head of the linked list.
  *
- * Return: void, no return.
+ * Return: Nothing.
  */
-void free_separator_list(Separator **head)
+void free_separator_list(separator_t **start)
 {
-	Separator *current_node, *temp_node;
+	separator_t *current, *temp;
 
-	if (head != NULL)
+	if (start != NULL)
 	{
-		current_node = *head;
+		current = *start;
 
-		while ((temp_node = current_node) != NULL)
+		while ((temp = current) != NULL)
 		{
-			current_node = current_node->next;
-			free(temp_node);
+			current = current->next;
+			free(temp);
 		}
 
-		*head = NULL;
+		*start = NULL;
 	}
 }
 
 /**
- * free_command_line_list - Free a command line singly linked list.
- * @head: Head of the linked list.
+ * free_cline_list - Free a command line singly linked list.
+ * @start: Head of the linked list.
  *
  * Return: void, no return.
  */
-void free_command_line_list(CommandLine **head)
+void free_cline_list(cline_t **start)
 {
-	CommandLine *current_node, *temp_node;
+	cline_t *current, *temp;
 
-	if (head != NULL)
+	if (start != NULL)
 	{
-		current_node = *head;
+		current = *start;
 
-		while ((temp_node = current_node) != NULL)
+		while ((temp = current) != NULL)
 		{
-			current_node = current_node->next;
-			free(temp_node);
+			current = current->next;
+			free(temp);
 		}
 
-		*head = NULL;
+		*start = NULL;
 	}
 }
 
@@ -122,7 +124,7 @@ void free_command_line_list(CommandLine **head)
 char **reallocate_dp(char **old_dp, unsigned int old, unsigned int nw)
 {
 	unsigned int i;
-	char **new_double_ptr;
+	char **nwm_dp;
 
 	if (old_dp == NULL)
 	{
@@ -134,8 +136,8 @@ char **reallocate_dp(char **old_dp, unsigned int old, unsigned int nw)
 		return (old_dp);
 	}
 
-	new_double_ptr = malloc(nw * sizeof(char *));
-	if (new_double_ptr == NULL)
+	nwm_dp = malloc(nw * sizeof(char *));
+	if (nwm_dp == NULL)
 	{
 		return (NULL);
 	}
@@ -143,12 +145,12 @@ char **reallocate_dp(char **old_dp, unsigned int old, unsigned int nw)
 	i = 0;
 	while (i < old)
 	{
-		new_double_ptr[i] = old_dp[i];
+		nwm_dp[i] = old_dp[i];
 		i++;
 	}
 
 	free(old_dp);
 
-	return (new_double_ptr);
+	return (nwm_dp);
 }
 

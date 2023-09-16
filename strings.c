@@ -59,15 +59,13 @@ char *duplicate_string(const char *str)
 	size_t str_length;
 	char *new_str;
 
-	str_length = custom_string_length(str);
+	str_length = string_length(str);
 
 	new_str = malloc((str_length + 1) * sizeof(char));
 	if (new_str == NULL)
-	{
 		return (NULL);
-	}
 
-	custom_copy_string(new_str, str);
+	copy_memory(new_str, str);
 
 	return (new_str);
 }
@@ -86,11 +84,9 @@ int compare_strings(char *s1, char *s2)
 	while (diff == 0)
 	{
 		if ((s1[i] == '\0') && (s2[i] == '\0'))
-		{
 			break;
-		}
 
-		diff = s1[i] - s2[i];
+		diff = *(s1 + i) - *(s2 + i);
 		i++;
 	}
 
@@ -112,10 +108,10 @@ char *tokenize_string(char string[], const char *delimiter)
 
 	if (string != NULL)
 	{
-		if (custom_charcmp(string, delimiter))
+		if (compare_cs(string, delimiter))
 			return (NULL);
 		token_start = string;
-		i = custom_string_length(string);
+		i = string_length(string);
 		token_end = &string[i];
 	}
 	token = token_start;

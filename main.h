@@ -12,68 +12,68 @@
 
 #define UNUSED(x) (void)(x)
 
-extern char **envment;
+extern char **env;
 
-typedef struct Shell Shell;
-typedef struct Builtins Builtins;
-typedef struct Separator Separator;
-typedef struct CommandLine CommandLine;
+typedef struct shell shell_t;
+typedef struct builtins builtins_t;
+typedef struct separator separator_t;
+typedef struct cline cline_t;
 
 /**
-* struct Shell - Structure representing the shell.
-* @args: Command line arguments.
+* struct shell - Structure representing the shell.
+* @av: Command line arguments.
+* @args: Parsed command line arguments.
 * @user_input: User's command input.
-* @parsed_args: Parsed command line arguments.
 * @status: Status of the shell.
 * @line_count: Line counter.
-* @environment: Environment variables.
+* @_env: Environment variables.
 * @pid_str: Process ID of the shell as a string.
 */
 
-struct Shell
+struct shell
 {
-	char **args;
+	char **av;
+	char *args;
 	char *user_input;
-	char **pargs;
-	char *pid_str;
-	char **_env;
 	int status;
 	int line_count;
+	char **_env;
+	char *pid_str;
 };
 
 /**
-* struct Builtins - Structure for shell built-in commands.
+* struct builtins - Structure for shell built-in commands.
 * @name: The name of the built-in command.
 * @function: Pointer to the function implementing the command.
 */
 
-struct Builtins
+struct builtins
 {
 	char *name;
-	int (*function)(Shell *shell);
+	int (*function)(shell_t *s);
 };
 /**
-* struct CommandLine - Structure for a single linked list of command lines.
+* struct cline - Structure for a single linked list of command lines.
 * @line: A command line node.
 * @next: Pointer to the next node.
 * Description: Single linked list to store command lines.
 */
-struct CommandLine
+struct cline
 {
 	char *line;
-	struct CommandLine *next;
+	struct cline *next;
 };
 
 /**
-* struct Separator - Structure for a single linked list of separators.
+* struct separator - Structure for a single linked list of separators.
 * @symbol: The separator character (e.g., ';').
 * @next: Pointer to the next node.
 * Description: Single linked list to store separators.
 */
-struct Separator
+struct separator
 {
 	char symbol;
-	struct Separator *next;
+	struct separator *next;
 };
 
 /* scan.c */
@@ -131,8 +131,8 @@ void next_commandl(Separator **set, CommandLine **com, Shell *shell);
 /* bonus.c */
 char *rm_non_print(char *user_input);
 char *rest_non_print(char *user_input);
-Separator *append_separator(Separator **head, char separator);
-CommandLine *append_commandl(CommandLine **head, char *cmd);
+separator_t *append_separator(separator_t **head, char separator);
+cline_t *append_commandl(cline_t **head, char *cmd);
 int compare_cs(char string[], const char *delim);
 
 /* errors_handling.c */

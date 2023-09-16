@@ -2,44 +2,44 @@
 
 /**
  * find_execommand - Find and execute a command.
- * @shell: Shell structure.
+ * @sh: Shell structure.
  *
  * Return: 1 on success.
  */
 
-int find_execommand(Shell *shell)
+int find_execommand(shell_t *sh)
 {
-	int (*builtin_func)(Shell *shell);
+	int (*builtin_func)(shell_t *sh);
 
-	if (shell->pargs[0] == NULL)
+	if (sh->args[0] == NULL)
 		return (1);
-	builtin_func = get_builtin(shell->pargs[0]);
+	builtin_func = get_builtin(sh->args[0]);
 	if (builtin_func != NULL)
-		return (builtin_func(shell));
-	return (execute_command(shell));
+		return (builtin_func(sh));
+	return (execute_command(sh));
 }
 
 /**
  * execute_command - Execute a command.
- * @shell: Shell structure.
+ * @sh: Shell structure.
  *
  * Return: 1 on success.
  */
 
-int execute_command(Shell *shell)
+int execute_command(shell_t *sh)
 {
 	int shell_status, executable;
-	pid_t pid, mypid;
+	pid_str_t pid, mypid;
 	char *cmd_directory;
 
 	UNUSED(mypid);
 
-	executable = is_exe(shell);
+	executable = is_exe(sh);
 	switch (executable)
 	{
 		case 0:
-			cmd_directory = find_command(shell->pargs[0], shell->_env);
-			if (command_error(cmd_directory, shell) == 1)
+			cmd_directory = find_command(s->args[0], sh->_env);
+			if (command_error(cmd_directory, sh) == 1)
 				return (1);
 			break;
 		case -1:
@@ -50,37 +50,37 @@ int execute_command(Shell *shell)
 	{
 		case 0:
 			if (executable == 0)
-				cmd_directory = find_command(shell->pargs[0], shell->_env);
+				cmd_directory = find_command(sh->args[0], sh->_env);
 			else
-				cmd_directory = shell->pargs[0];
-			execve(cmd_directory + executable, shell->pargs, shell->_env);
+				cmd_directory = sh->args[0];
+			execve(cmd_directory + executable, sh->args, sh->_env);
 			break;
 		case -1:
-			perror(shell->args[0]);
+			perror(sh->av[0]);
 			return (1);
 		default:
 			do {
 				mypid = waitpid(pid, &shell_status, WUNTRACED);
 			} while (!WIFEXITED(shell_status) && !WIFSIGNALED(shell_status));
 	}
-	shell->status = shell_status / 256;
+	sh->status = shell_status / 256;
 	return (1);
 }
 
 /**
  * is_exe - Check if a file is executable.
- * @shell: Shell structure.
+ * @sh: Shell structure.
  *
  * Return: 0 if it's not an executable, otherwise returns the index.
  */
 
-int is_exe(Shell *shell)
+int is_exe(shell_t *sh)
 {
 	int i = 0, j;
 	char *user_input;
-	struct stat stat;
+	struct stat s;
 
-	user_input = shell->pargs[0];
+	user_input = sh->args[0];
 	while (user_input[i])
 	{
 		if (user_input[i] == 46)
@@ -106,27 +106,27 @@ int is_exe(Shell *shell)
 	j = i;
 	if (j == 0)
 		return (0);
-	if (stat(user_input + i, &stat) == 0)
+	if (stat(user_input + i, &s) == 0)
 		return (i);
-	errors(shell, 127);
+	handle_errors(sh, 127);
 	return (-1);
 }
 
 /**
  * find_command - Find the location of a command.
  * @command: Command, e.g., ls.
- * @environment: Environment variable.
+ * @_env: Environment variable.
  *
  * Return: Location of the command or NULL if not found.
  */
 
-char *find_command(char *command, char **env)
+char *find_command(char *command, char **_env)
 {
 	int index = 0, dirl, cmdl;
 	char *pcmd, *pptr, *ptoken, *dir;
 	struct stat s;
 
-	pcmd = get_env_var("PATH", env);
+	pcmd = get_env_var("PATH", _env);
 	if (cmd_path)
 	{
 		pptr = duplicate_string(pcmd);
