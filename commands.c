@@ -7,9 +7,9 @@
  * Return: 1 on success.
  */
 
-int find_execommand(shell_t *sh)
+int find_execommand(myshell *sh)
 {
-	int (*builtin_func)(shell_t *sh);
+	int (*builtin_func)(myshell *sh);
 
 	if (sh->args[0] == NULL)
 		return (1);
@@ -26,9 +26,9 @@ int find_execommand(shell_t *sh)
  * Return: 1 on success.
  */
 
-int execute_command(shell_t *sh)
+int execute_command(myshell *sh)
 {
-	int shell_status, executable;
+	int status, executable;
 	pid_str_t pid, mypid;
 	char *cmd_directory;
 
@@ -60,10 +60,10 @@ int execute_command(shell_t *sh)
 			return (1);
 		default:
 			do {
-				mypid = waitpid(pid, &shell_status, WUNTRACED);
-			} while (!WIFEXITED(shell_status) && !WIFSIGNALED(shell_status));
+				mypid = waitpid(pid, &status, WUNTRACED);
+			} while (!WIFEXITED(status) && !WIFSIGNALED(status));
 	}
-	sh->status = shell_status / 256;
+	sh->status = status / 256;
 	return (1);
 }
 
@@ -74,7 +74,7 @@ int execute_command(shell_t *sh)
  * Return: 0 if it's not an executable, otherwise returns the index.
  */
 
-int is_exe(shell_t *sh)
+int is_exe(myshell *sh)
 {
 	int i = 0, j;
 	char *user_input;

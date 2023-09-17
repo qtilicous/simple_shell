@@ -1,23 +1,35 @@
 #ifndef MAIN_H
 #define MAIN_H
 
-#include <limits.h>
-#include <unistd.h>
 #include <stdio.h>
-#include <fcntl.h>
+#include <unistd.h>
 #include <stdlib.h>
-#include <sys/stat.h>
-#include <sys/wait.h>
+#include <limits.h>
 #include <string.h>
+#include <fcntl.h>
+#include <sys/wait.h>
+#include <sys/stat.h>
 
 #define UNUSED(x) (void)(x)
 
 extern char **env;
 
-typedef struct shell shell_t;
-typedef struct builtins builtins_t;
-typedef struct separator separator_t;
-typedef struct cline cline_t;
+typedef struct builtins mybuiltins;
+typedef struct shell myshell;
+typedef struct cline mycline;
+typedef struct separator myseparator;
+
+/**
+* struct builtins - Structure for shell built-in commands.
+* @name: The name of the built-in command.
+* @function: Pointer to the function implementing the command.
+*/
+
+struct builtins
+{
+	char *name;
+	int (*function)(myshell *s);
+};
 
 /**
 * struct shell - Structure representing the shell.
@@ -42,17 +54,6 @@ struct shell
 };
 
 /**
-* struct builtins - Structure for shell built-in commands.
-* @name: The name of the built-in command.
-* @function: Pointer to the function implementing the command.
-*/
-
-struct builtins
-{
-	char *name;
-	int (*function)(shell_t *s);
-};
-/**
 * struct cline - Structure for a single linked list of command lines.
 * @line: A command line node.
 * @next: Pointer to the next node.
@@ -76,11 +77,6 @@ struct separator
 	struct separator *next;
 };
 
-/* scan.c */
-char *read_input(int *eof);
-ssize_t _getline(char **outp_buffer, size_t *outp_size, FILE *inp_stream);
-void _getline2(char **buffer, size_t *s, char *s_buffer, size_t inpsize);
-
 /* strings.c */
 char *copy_string(char *dest, char *src);
 char *concatenate_strings(char *dest, const char *src);
@@ -95,64 +91,69 @@ char *integer_to_string(int num);
 int string_to_integer(char *str);
 int is_digit(const char *character);
 
+/* scan.c */
+char *read_input(int *eof);
+ssize_t _getline(char **outp_buffer, size_t *outp_size, FILE *inp_stream);
+void _getline2(char **buffer, size_t *s, char *s_buffer, size_t inpsize);
+
+/* commands.c */
+int find_execommand(myshell *sh);
+int execute_command(myshell *sh);
+int is_commandexe(myshell *sh);
+char *find_command(char *command, char **_env);
+int is_dir_path(char *path, int *index);
+
+/* command_parser.c */
+int parse_commandl(myshell *sh, char *user_input);
+char **toke_commandl(char *user_input);
+void create_nodes(myseparator **s_head, mycline **c_head, char *user_input);
+void next_commandl(myseparator **set, mycline **com, myshell *sh);
+
 /* memory.c */
 void copy_memory(void *dest_ptr, const void *src_ptr, unsigned int size);
 void *reallocate_mem(void *ptr, unsigned int old, unsigned int nw);
-void free_separator_list(Separator **head);
-void free_cline_list(CommandLine **head);
+void free_separator_list(myseparator **start);
+void free_cline_list(mycline **start);
 char **reallocate_dp(char **old_dp, unsigned int old, unsigned int nw);
 
-/* commands.c */
-int find_execommand(Shell *shell);
-int execute_command(Shell *shell);
-int is_commandexe(Shell *shell);
-char *find_command(char *command, char **env);
-int is_dir_path(char *path, int *index);
-
 /* environment.c */
-char *get_env_var(const char *var_name, char **env);
-int print_env_var(shell_t *sh);
-int _setenv(shell_t *sh);
-int _unsetenv(shell_t *sh);
+char *get_env_var(const char *var_name, char **_env);
+int print_env_var(myshell *sh);
+int _setenv(myshell *sh);
+int _unsetenv(myshell *sh);
 char *create_env_var(char *var_name, char *var_value);
 
 /* cd_environment.c */
 int compare_env_varname(const char *variable_name, const char *partial_name);
-void set_cd(char *var_name, char *var_value, shell_t *sh);
-void cd(Shell *shell);
+void set_cd(char *var_name, char *var_value, myshell *sh);
+void cd(myshell *sh);
 char *get_cd_env(const char *var_name, char **_env);
-
-/* command_parser.c */
-int parse_commandl(shell_t *sh, char *user_input);
-char **toke_commandl(char *user_input);
-void create_nodes(separator_t **s_head, cline_t **c_head, char *user_input);
-void next_commandl(separator_t **set, cline_t **com, shell_t *sh);
 
 /* utils.c */
 char *rm_non_print(char *user_input);
 char *rest_non_print(char *user_input);
-separator_t *append_separator(separator_t **head, char sep);
-CommandLine *append_commandl(CommandLine **head, char *cmd);
+myseparator *append_separator(myseparator **head, char sep);
+mycline *append_commandl(mycline **head, char *cmd);
 int compare_cs(char str[], const char *lim);
 
 /* errors_handling.c */
-char *exit_error(shell_t *sh);
-char *env_error(shell_t *sh);
-int handle_errors(shell_t *sh, int error);
-int command_error(char *directory, shell_t *sh);
-char *not_found_error(shell_t *sh);
+char *exit_error(myshell *sh);
+char *env_error(myshell *sh);
+int handle_errors(myshell *sh, int error);
+int command_error(char *directory, myshell *sh);
+char *not_found_error(myshell *sh);
 
 /* cd_errors.c */
-char *cd_error(shell_t *sh);
-char *cd_error_concat(shell_t *sh, char *message, char *error, char *line);
-char *path_error(shell_t *sh);
+char *cd_error(myshell *sh);
+char *cd_error_concat(myshell *sh, char *message, char *error, char *line);
+char *path_error(myshell *sh);
 
 /* builtins.c */
-int change_directory(shell_t *sh);
-void previous_dir(shell_t *sh);
-void home_dir(shell_t *sh);
-int (*get_builtin(char *cmd))(shell_t *)
-int shell_exit(shell_t *sh);
+int change_directory(myshell *sh);
+void previous_dir(myshell *sh);
+void home_dir(myshell *sh);
+int (*builtins(char *command))(myshell *);
+int shell_exit(myshell *sh);
 
 #endif
 

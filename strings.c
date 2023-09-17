@@ -65,7 +65,7 @@ char *duplicate_string(const char *str)
 	if (new_str == NULL)
 		return (NULL);
 
-	copy_memory(new_str, str);
+	copy_memory(new_str, str, str_length + 1);
 
 	return (new_str);
 }

@@ -45,7 +45,7 @@ char *get_env_var(const char *var_name, char **_env)
  *
  * Return: always 1 (success).
  */
-int print_env_var(shell_t *sh)
+int print_env_var(myshell *sh)
 {
 	int i = 0, j;
 
@@ -70,9 +70,9 @@ int print_env_var(shell_t *sh)
  *
  * Return: 1 on success, error message on failure.
  */
-int _setenv(shell_t *sh)
+int _setenv(myshell *sh)
 {
-	shell_t *shell_ptr;
+	myshell *shell_ptr;
 	char *var_name, *var_value, *env_var, *env_name;
 	int i, env_compare;
 
@@ -116,7 +116,7 @@ int _setenv(shell_t *sh)
  *
  * Return: 1 on success or error message on failure.
  */
-int _unsetenv(shell_t *sh)
+int _unsetenv(myshell *sh)
 {
 	char **env_rel;
 	int i, j, check = -1;

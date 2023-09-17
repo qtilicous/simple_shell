@@ -70,9 +70,9 @@ void *reallocate_mem(void *ptr, unsigned int old, unsigned int nw)
  *
  * Return: Nothing.
  */
-void free_separator_list(separator_t **start)
+void free_separator_list(myseparator **start)
 {
-	separator_t *current, *temp;
+	myseparator *current, *temp;
 
 	if (start != NULL)
 	{
@@ -94,9 +94,9 @@ void free_separator_list(separator_t **start)
  *
  * Return: void, no return.
  */
-void free_cline_list(cline_t **start)
+void free_cline_list(mycline **start)
 {
-	cline_t *current, *temp;
+	mycline *current, *temp;
 
 	if (start != NULL)
 	{

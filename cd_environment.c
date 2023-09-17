@@ -30,7 +30,7 @@ int compare_env_varname(const char *variable_name, const char *partial_name)
  * Return: Nothing.
  */
 
-void set_cd(char *var_name, char *var_value, shell_t *sh)
+void set_cd(char *var_name, char *var_value, myshell *sh)
 {
 	char *evar, *ename;
 	int i = 0, cmp;
@@ -62,7 +62,7 @@ void set_cd(char *var_name, char *var_value, shell_t *sh)
  * Return: Nothing.
  */
 
-void cd(shell *sh)
+void cd(myshell *sh)
 {
 	char *dir, *p, *c;
 	char pwd[PATH_MAX];

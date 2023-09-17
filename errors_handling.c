@@ -6,7 +6,7 @@
  *
  * Return: Error message.
  */
-char *exit_error(shell_t *sh)
+char *exit_error(myshell *sh)
 {
 	char *error, *str = integer_to_string(sh->line_count);
 	int l = string_length(shell->av[0]) + string_length(str);
@@ -38,7 +38,7 @@ char *exit_error(shell_t *sh)
  *
  * Return: Error message.
  */
-char *env_error(shell_t *sh)
+char *env_error(myshell *sh)
 {
 	char *error;
 	char *s = integer_to_string(sh->line_count);
@@ -75,7 +75,7 @@ char *env_error(shell_t *sh)
  *
  * Return: Error code.
  */
-int handle_errors(shell_t *sh, int error)
+int handle_errors(myshell *sh, int error)
 {
 	char *err;
 	int check = compare_strings("cd", sh->args[0]);
@@ -123,7 +123,7 @@ int handle_errors(shell_t *sh, int error)
  *
  * Return: 1 if there is an error, 0 if not.
  */
-int command_error(char *ddir, shell_t *sh)
+int command_error(char *ddir, myshell *sh)
 {
 	int i, j, k;
 
@@ -164,7 +164,7 @@ int command_error(char *ddir, shell_t *sh)
  *
  * Return: Error message.
  */
-char *not_found_error(shell_t *sh)
+char *not_found_error(myshell *sh)
 {
 	char *error, *s = integer_to_string(sh->line_count);
 	int str_length;

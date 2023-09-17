@@ -6,7 +6,7 @@
  *
  * Return: Error message.
  */
-char *cd_error(shell_t *sh)
+char *cd_error(myshell *sh)
 {
 	char *error, *message, *s = integer_to_string(sh->line_count);
 	int id, l;
@@ -47,7 +47,7 @@ char *cd_error(shell_t *sh)
  *
  * Return: Error message.
  */
-char *cd_error_concat(shell_t *sh, char *message, char *error, char *line)
+char *cd_error_concat(myshell *sh, char *message, char *error, char *line)
 {
 	char *i;
 
@@ -83,7 +83,7 @@ char *cd_error_concat(shell_t *sh, char *message, char *error, char *line)
  *
  * Return: Error message.
  */
-char *path_error(shell *sh)
+char *path_error(myshell *sh)
 {
 	char *error, *s = integer_to_string(sh->line_count);
 	int l = string_length(sh->av[0]) + string_length(s);

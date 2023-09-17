@@ -1,25 +1,6 @@
 #include "main.h"
 
 /**
- * read_input - Read user input.
- * @eof: Pointer to the end-of-file indicator.
- *
- * Return: User input string.
- */
-
-char *read_input(int *eof)
-{
-	size_t size;
-	char *input;
-
-	size = 0;
-	input = NULL;
-
-	*eof = _getline(&input, &size, stdin);
-	return (input);
-}
-
-/**
  * _getline - Read user input from a stream.
  * @outp_buffer: Buffer to store user input.
  * @outp_size: Size of the buffer.
@@ -55,10 +36,10 @@ ssize_t _getline(char **outp_buffer, size_t *outp_size, FILE *inp_stream)
 		}
 		if (inp_size != 0 && input_char == 0)
 		{
-			inpsize++;
+			inp_size++;
 			break;
 		}
-		if (inpsize >= 1024)
+		if (inp_size >= 1024)
 			temp_buffer = reallocate_mem(temp_buffer, inp_size, inp_size + 1);
 		temp_buffer[inp_size] = last_char;
 		inp_size++;
@@ -105,4 +86,23 @@ void _getline2(char **buffer, size_t *s, char *s_buffer, size_t inpsize)
 		copy_string(*buffer, s_buffer);
 		free(s_buffer);
 	}
+}
+
+/**
+ * read_input - Read user input.
+ * @eof: Pointer to the end-of-file indicator.
+ *
+ * Return: User input string.
+ */
+
+char *read_input(int *eof)
+{
+	size_t size;
+	char *input;
+
+	size = 0;
+	input = NULL;
+
+	*eof = _getline(&input, &size, stdin);
+	return (input);
 }

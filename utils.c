@@ -60,11 +60,11 @@ char *rest_non_print(char *user_input)
  * Return: Pointer to the head.
  */
 
-separator_t *append_separator(separator_t **head, char sep)
+myseparator *append_separator(myseparator **head, char sep)
 {
-	separator_t *new, *temp;
+	myseparator *new, *temp;
 
-	new = malloc(sizeof(separator_t));
+	new = malloc(sizeof(myseparator));
 	if (new == NULL)
 		return (NULL);
 	new->symbol = sep;
@@ -91,11 +91,11 @@ separator_t *append_separator(separator_t **head, char sep)
  * Return: Pointer to the head.
  */
 
-cline *append_commandl(cline_t **head, char *cl)
+mycline *append_commandl(mycline **head, char *cl)
 {
-	cline *new, *temp;
+	mycline *new, *temp;
 
-	new = malloc(sizeof(cline_t));
+	new = malloc(sizeof(mycline));
 	if (new == NULL)
 		return (NULL);
 	new->line = cl;
@@ -110,13 +110,13 @@ cline *append_commandl(cline_t **head, char *cl)
 		{
 			temp = temp->next;
 		}
-		temp->next = new
+		temp->next = new;
 	}
 	return (*head);
 }
 
 /**
- * compare_cs - Chasr of strings comparison.
+ * compare_cs - Char of strings comparison.
  * @str: Input string.
  * @lim: Delimiter.
  *

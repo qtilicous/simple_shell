@@ -7,12 +7,12 @@
  * Return: Always 1 (success).
  */
 
-int change_directory(shell_t *sh)
+int change_directory(myshell *sh)
 {
 	char *d = sh->args[1];
 
-	if (d == NULL || compare_strings(dir, "$HOME") == 0
-			|| compare_strings(dir, "--") == 0)
+	if (d == NULL || compare_strings(d, "$HOME") == 0
+			|| compare_strings(d, "--") == 0)
 	{
 		home_dir(sh);
 		return (1);
@@ -32,7 +32,7 @@ int change_directory(shell_t *sh)
  *
  * Return: nothing.
  */
-void previous_dir(shell_t *sh)
+void previous_dir(myshell *sh)
 {
 	char *current_dir, *old_dir, *current_pwd, *old_pwd;
 	char pwd[PATH_MAX];
@@ -44,7 +44,7 @@ void previous_dir(shell_t *sh)
 	if (old_dir == NULL)
 		old_pwd = current_pwd;
 	else
-		old_pwd = duplicate_string(old_current_directory);
+		old_pwd = duplicate_string(old_dir);
 	set_cd("OLDPWD", current_pwd, sh);
 	switch (chdir(old_pwd))
 	{
@@ -60,7 +60,7 @@ void previous_dir(shell_t *sh)
 	free(current_pwd);
 	if (old_dir)
 		free(old_pwd);
-	Shell->status = 0;
+	sh->status = 0;
 	chdir(current_dir);
 }
 
@@ -70,48 +70,48 @@ void previous_dir(shell_t *sh)
  *
  * Return: nothing.
  */
-void home_dir(shell_t *sh)
+void home_dir(myshell *sh)
 {
 	char current_dir[PATH_MAX];
-	char *home_dir = get_cd_env("HOME", sh->_env);
+	char *_hdir = get_cd_env("HOME", sh->_env);
 
 	getcwd(current_dir, sizeof(current_dir));
-	if (home_dir == NULL || chdir(home_dir) == -1)
-		handle_errors(shell, 2);
+	if (_hdir == NULL || chdir(_hdir) == -1)
+		handle_errors(sh, 2);
 	else
 	{
 		set_cd("OLDPWD", current_dir, sh);
-		set_cd("PWD", home_directory, sh);
+		set_cd("PWD", _hdir, sh);
 	}
-	Sh->status = 0;
+	sh->status = 0;
 }
 
 /**
- * get_builtin - Get the pointer to the specified builtin command.
- * @cmd: The command entered by the user.
+ * *builtins - Get the pointer to the specified builtin command.
+ * @command: The command entered by the user.
  *
  * Return: Pointer to the corresponding builtin function.
  */
-int (*get_builtin(char *cmd))(shell_t *)
+int (*builtins(char *command))(myshell *)
 {
-	int i = 0, cmp;
+	int k = 0, c;
 
-	builtins_t builtins[] = {
+	mybuiltins builtins[] = {
 		{"exit", shell_exit},
 		{"env", print_env_var},
 		{"setenv", _setenv},
 		{"unsetenv", _unsetenv},
 		{"cd", change_directory},
 		{NULL, NULL},
-	}
-	while (builtins[i].name)
+	};
+	while (builtins[k].name)
 	{
-		cmp = compare_strings(builtins[i].name, cmd);
-		if (cmp == 0)
+		c = compare_strings(builtins[k].name, command);
+		if (c == 0)
 			break;
-		i++;
-	}
-	return (builtins[i].function);
+		k++;
+	};
+	return (builtins[k].function);
 }
 
 /**
@@ -120,7 +120,7 @@ int (*get_builtin(char *cmd))(shell_t *)
  *
  * Return: 0 on success, 1 on failure.
  */
-int shell_exit(shell_t *sh)
+int shell_exit(myshell *sh)
 {
 	unsigned int st;
 	int valid, length, num, should_exit;

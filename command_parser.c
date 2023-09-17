@@ -7,11 +7,11 @@
  *
  * Return: 0 on exit, 1 to continue.
  */
-int parse_commandl(shell_t *sh, char *user_input)
+int parse_commandl(myshell *sh, char *user_input)
 {
 	int continue_execution;
-	separator_t *s_head = NULL, *s_current;
-	cline *c_head = NULL, *c_current;
+	myseparator *s_head = NULL, *s_current;
+	mycline *c_head = NULL, *c_current;
 
 	create_nodes(&s_head, &c_head, user_input);
 	s_current = s_head;
@@ -98,7 +98,7 @@ char **toke_commandl(char *user_input)
  *
  * Return: nothing.
  */
-void create_nodes(separator_t **s_head, cline_t **c_head, char *user_input)
+void create_nodes(myseparator **s_head, mycline **c_head, char *user_input)
 {
 	char *command_line;
 	int j;
@@ -136,10 +136,10 @@ void create_nodes(separator_t **s_head, cline_t **c_head, char *user_input)
  *
  * Return: Nothing.
  */
-void next_commandl(separator_t **set, cline_t **com, shell_t *sh)
+void next_commandl(myseparator **set, mycline **com, myshell *sh)
 {
-	cline_t *command_line = *com;
-	separator_t *separator = *set;
+	mycline *command_line = *com;
+	myseparator *separator = *set;
 	int i, s = sh->status;
 
 	for (i = 1; i && separator != NULL;)
