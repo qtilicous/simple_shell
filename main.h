@@ -12,7 +12,7 @@
 
 #define UNUSED(x) (void)(x)
 
-extern char **env;
+extern char **environ;
 
 typedef struct builtins mybuiltins;
 typedef struct shell myshell;
@@ -45,7 +45,7 @@ struct builtins
 struct shell
 {
 	char **av;
-	char *args;
+	char **args;
 	char *user_input;
 	int status;
 	int line_count;
@@ -85,7 +85,7 @@ int compare_strings(char *s1, char *s2);
 char *tokenize_string(char string[], const char *delimiter);
 
 /* converters.c */
-int count_digits(const char *str);
+int count_digits(int num);
 int string_length(const char *str);
 char *integer_to_string(int num);
 int string_to_integer(char *str);
@@ -99,7 +99,7 @@ void _getline2(char **buffer, size_t *s, char *s_buffer, size_t inpsize);
 /* commands.c */
 int find_execommand(myshell *sh);
 int execute_command(myshell *sh);
-int is_commandexe(myshell *sh);
+int is_exe(myshell *sh);
 char *find_command(char *command, char **_env);
 int is_dir_path(char *path, int *index);
 

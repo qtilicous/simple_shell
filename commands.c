@@ -13,7 +13,7 @@ int find_execommand(myshell *sh)
 
 	if (sh->args[0] == NULL)
 		return (1);
-	builtin_func = get_builtin(sh->args[0]);
+	builtin_func = builtins(sh->args[0]);
 	if (builtin_func != NULL)
 		return (builtin_func(sh));
 	return (execute_command(sh));
@@ -28,25 +28,25 @@ int find_execommand(myshell *sh)
 
 int execute_command(myshell *sh)
 {
-	int status, executable;
-	pid_str_t pid, mypid;
+	int state, executable;
+	pid_t _pid, _mypid;
 	char *cmd_directory;
 
-	UNUSED(mypid);
+	UNUSED(_mypid);
 
 	executable = is_exe(sh);
 	switch (executable)
 	{
 		case 0:
-			cmd_directory = find_command(s->args[0], sh->_env);
+			cmd_directory = find_command(sh->args[0], sh->_env);
 			if (command_error(cmd_directory, sh) == 1)
 				return (1);
 			break;
 		case -1:
 			return (1);
 	}
-	pid = fork();
-	switch (pid)
+	_pid = fork();
+	switch (_pid)
 	{
 		case 0:
 			if (executable == 0)
@@ -60,10 +60,10 @@ int execute_command(myshell *sh)
 			return (1);
 		default:
 			do {
-				mypid = waitpid(pid, &status, WUNTRACED);
-			} while (!WIFEXITED(status) && !WIFSIGNALED(status));
+				_mypid = waitpid(_pid, &state, WUNTRACED);
+			} while (!WIFEXITED(state) && !WIFSIGNALED(state));
 	}
-	sh->status = status / 256;
+	sh->status = state / 256;
 	return (1);
 }
 
@@ -86,7 +86,7 @@ int is_exe(myshell *sh)
 		if (user_input[i] == 46)
 		{
 			if (user_input[i + 1] == 46)
-				return (0)
+				return (0);
 			if (user_input[i + 1] == 47)
 				continue;
 			else
@@ -127,7 +127,7 @@ char *find_command(char *command, char **_env)
 	struct stat s;
 
 	pcmd = get_env_var("PATH", _env);
-	if (cmd_path)
+	if (pcmd)
 	{
 		pptr = duplicate_string(pcmd);
 		cmdl = string_length(command);

@@ -7,7 +7,7 @@
  * Return: Number of digits in the integer.
  */
 
-int count_digits(const int num)
+int count_digits(int num)
 {
 	int digit_count = 1;
 	unsigned int absolute_num;
@@ -117,13 +117,13 @@ int string_to_integer(char *str)
  * Return: 1 if the character is a digit, 0 otherwise.
  */
 
-int is_digit(const char character)
+int is_digit(const char *character)
 {
 	unsigned int j = 0;
 
 	while (character[j])
 	{
-		if (character[j] < '0' || character[j] > '9')
+		if (character[j] < 48 || character[j] > 57)
 			return (0);
 		j++;
 	}

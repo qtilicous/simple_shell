@@ -9,7 +9,7 @@
  */
 int parse_commandl(myshell *sh, char *user_input)
 {
-	int continue_execution;
+	int loop;
 	myseparator *s_head = NULL, *s_current;
 	mycline *c_head = NULL, *c_current;
 
@@ -20,11 +20,11 @@ int parse_commandl(myshell *sh, char *user_input)
 	for (; c_current != NULL;)
 	{
 		sh->user_input = c_current->line;
-		sh->args = parse_commandl(sh->user_input);
-		continue_execution = find_execommand(sh);
+		sh->args = toke_commandl(sh->user_input);
+		loop = find_execommand(sh);
 		free(sh->args);
 
-		if (continue_execution == 0)
+		if (loop == 0)
 		{
 			break;
 		}
@@ -40,7 +40,7 @@ int parse_commandl(myshell *sh, char *user_input)
 	free_separator_list(&s_head);
 	free_cline_list(&c_head);
 
-	switch (continue_execution)
+	switch (loop)
 	{
 		case 0:
 			return (0);
@@ -106,18 +106,18 @@ void create_nodes(myseparator **s_head, mycline **c_head, char *user_input)
 	user_input = rm_non_print(user_input);
 
 	j = 0;
-	while (user_input[i])
+	while (user_input[j])
 	{
-		if (user_input[i] == ';')
+		if (user_input[j] == ';')
 		{
-			append_separator(s_head, user_input[i]);
+			append_separator(s_head, user_input[j]);
 		}
-		if (user_input[i] == '|' || user_input[i] == '&')
+		if (user_input[j] == '|' || user_input[j] == '&')
 		{
-			append_separator(s_head, user_input[i]);
-			i++;
+			append_separator(s_head, user_input[j]);
+			j++;
 		}
-		i++;
+		j++;
 	}
 
 	command_line = tokenize_string(user_input, ";|&");

@@ -97,7 +97,7 @@ char *get_cd_env(const char *var_name, char **_env)
 	char *e = NULL;
 	int i = 0, j = 0;
 
-	while (_envt[i])
+	while (_env[i])
 	{
 		j = compare_env_varname(_env[i], var_name);
 		if (j)

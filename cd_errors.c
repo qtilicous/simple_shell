@@ -90,7 +90,7 @@ char *path_error(myshell *sh)
 
 	l = l + string_length(sh->args[0]) + 25;
 
-	error = malloc((len + 1) * sizeof(char));
+	error = malloc((l + 1) * sizeof(char));
 	if (error == 0)
 	{
 		free(error);

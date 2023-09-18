@@ -9,9 +9,9 @@
 char *exit_error(myshell *sh)
 {
 	char *error, *str = integer_to_string(sh->line_count);
-	int l = string_length(shell->av[0]) + string_length(str);
+	int l = string_length(sh->av[0]) + string_length(str);
 
-	len += string_length(sh->args[0]) + string_length(sh->args[1]) + 23;
+	l += string_length(sh->args[0]) + string_length(sh->args[1]) + 23;
 	error = malloc(sizeof(char) * (l + 1));
 	if (error == 0)
 	{
