@@ -92,9 +92,9 @@ int string_to_integer(char *str);
 int is_digit(const char *character);
 
 /* scan.c */
-char *read_input(int *eof);
 ssize_t _getline(char **outp_buffer, size_t *outp_size, FILE *inp_stream);
 void _getline2(char **buffer, size_t *s, char *s_buffer, size_t inpsize);
+char *read_input(int *eof);
 
 /* commands.c */
 int find_execommand(myshell *sh);
@@ -133,14 +133,14 @@ char *get_cd_env(const char *var_name, char **_env);
 char *rm_non_print(char *user_input);
 char *rest_non_print(char *user_input);
 myseparator *append_separator(myseparator **head, char sep);
-mycline *append_commandl(mycline **head, char *cmd);
+mycline *append_commandl(mycline **head, char *cl);
 int compare_cs(char str[], const char *lim);
 
 /* errors_handling.c */
 char *exit_error(myshell *sh);
 char *env_error(myshell *sh);
 int handle_errors(myshell *sh, int error);
-int command_error(char *directory, myshell *sh);
+int command_error(char *ddir, myshell *sh);
 char *not_found_error(myshell *sh);
 
 /* cd_errors.c */
