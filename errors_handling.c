@@ -166,29 +166,20 @@ int command_error(char *ddir, myshell *sh)
  */
 char *not_found_error(myshell *sh)
 {
-	char *error, *s = integer_to_string(sh->line_count);
+	char *error;
 	int str_length;
 
-	str_length = string_length(sh->av[0]) + string_length(s);
-	str_length = str_length + string_length(sh->args[0]) + 18;
+	str_length = string_length(sh->av[0]) + 22;
 
 	error = malloc((str_length + 1) * sizeof(char));
-	if (error == 0)
+	if (error == NULL)
 	{
-		free(error);
-		free(s);
 		return (NULL);
 	}
 
 	copy_string(error, sh->av[0]);
-	concatenate_strings(error, ": ");
-	concatenate_strings(error, s);
-	concatenate_strings(error, ": ");
-
-	concatenate_strings(error, sh->args[0]);
 	concatenate_strings(error, ": No such file or directory\n");
 	concatenate_strings(error, "\0");
-	free(s);
 
 	return (error);
 }
