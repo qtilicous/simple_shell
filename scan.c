@@ -106,3 +106,4 @@ char *read_input(int *eof)
 	*eof = _getline(&input, &size, stdin);
 	return (input);
 }
+
