@@ -186,7 +186,7 @@ char *not_found_error(myshell *sh)
 	concatenate_strings(error, ": ");
 
 	concatenate_strings(error, sh->args[0]);
-	concatenate_strings(error, ": not found\n");
+	concatenate_strings(error, ": No such file or directory\n");
 	concatenate_strings(error, "\0");
 	free(s);
 
