@@ -173,7 +173,7 @@ char *not_found_error(myshell *sh)
 	str_length = str_length + string_length(sh->args[0]) + 18;
 
 	error = malloc((str_length + 1) * sizeof(char));
-	if (error == NULL)
+	if (error == 0)
 	{
 		free(error);
 		free(s);

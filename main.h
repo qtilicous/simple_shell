@@ -92,9 +92,9 @@ int string_to_integer(char *str);
 int is_digit(const char *character);
 
 /* scan.c */
+char *read_input(int *eof);
 ssize_t _getline(char **outp_buffer, size_t *outp_size, FILE *inp_stream);
 void _getline2(char **buffer, size_t *s, char *s_buffer, size_t inpsize);
-char *read_input(int *eof);
 
 /* commands.c */
 int find_execommand(myshell *sh);
